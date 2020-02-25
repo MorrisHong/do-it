@@ -156,7 +156,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy front-end template to target</id>
+                        <id>copy frontend template to target</id>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
