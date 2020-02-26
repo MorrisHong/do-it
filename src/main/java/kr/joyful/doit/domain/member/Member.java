@@ -2,6 +2,7 @@ package kr.joyful.doit.domain.member;
 
 import kr.joyful.doit.domain.common.BaseTimeEntity;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -23,10 +24,18 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
+
     @Builder
-    public Member(String email, String username, String password) {
+    public Member(String email, String username, String password, MemberRole role) {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.role = role;
+    }
+
+    public void encodePassword(PasswordEncoder passwordEncode) {
+        this.password = passwordEncode.encode(password);
     }
 }
