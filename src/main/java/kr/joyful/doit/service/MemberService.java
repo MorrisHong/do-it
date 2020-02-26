@@ -31,7 +31,6 @@ public class MemberService implements UserDetailsService{
             throw new UsernameNotFoundException(username);
         }
 
-        UserDetails user;
         if (username.contains("@")) {
             Member member = memberRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
             return User.builder()

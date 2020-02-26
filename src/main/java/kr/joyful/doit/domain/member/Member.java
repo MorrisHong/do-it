@@ -1,10 +1,13 @@
 package kr.joyful.doit.domain.member;
 
 import kr.joyful.doit.domain.common.BaseTimeEntity;
+import kr.joyful.doit.domain.team.Team;
+import kr.joyful.doit.domain.teamMember.TeamMember;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -27,8 +30,12 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private TeamMember teamMember;
+
     @Builder
-    public Member(String email, String username, String password, MemberRole role) {
+    public Member(String email, String username, String password, MemberRole role, Team team) {
         this.email = email;
         this.username = username;
         this.password = password;
