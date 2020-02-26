@@ -1,9 +1,8 @@
 package kr.joyful.doit.web.dto;
 
-import kr.joyful.doit.entity.Member;
+import kr.joyful.doit.model.member.Member;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
