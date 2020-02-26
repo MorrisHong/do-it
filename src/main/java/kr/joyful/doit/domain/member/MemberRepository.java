@@ -1,4 +1,4 @@
-package kr.joyful.doit.model.member;
+package kr.joyful.doit.domain.member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

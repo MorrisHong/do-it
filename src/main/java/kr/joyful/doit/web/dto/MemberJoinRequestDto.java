@@ -1,6 +1,6 @@
 package kr.joyful.doit.web.dto;
 
-import kr.joyful.doit.model.member.Member;
+import kr.joyful.doit.domain.member.Member;
 import lombok.Builder;
 import lombok.Data;
 

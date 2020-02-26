@@ -48,6 +48,7 @@ class MemberControllerTest {
         mockMvc.perform(post("/api/member")
                     .content(objectMapper.writeValueAsString(memberDto))
                     .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isCreated());
     }
 
@@ -62,8 +63,8 @@ class MemberControllerTest {
         MemberJoinRequestDto memberDto = createMockMemberDto(email, username, password, password2);
 
         mockMvc.perform(post("/api/member")
-                .content(objectMapper.writeValueAsString(memberDto))
-                .contentType(MediaType.APPLICATION_JSON))
+                    .content(objectMapper.writeValueAsString(memberDto))
+                    .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
