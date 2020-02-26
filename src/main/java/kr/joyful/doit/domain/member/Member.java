@@ -1,6 +1,6 @@
-package kr.joyful.doit.model.member;
+package kr.joyful.doit.domain.member;
 
-import kr.joyful.doit.model.common.BaseTimeEntity;
+import kr.joyful.doit.domain.common.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;

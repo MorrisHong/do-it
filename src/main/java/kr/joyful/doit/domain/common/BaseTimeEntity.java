@@ -1,4 +1,4 @@
-package kr.joyful.doit.model.common;
+package kr.joyful.doit.domain.common;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

@@ -1,7 +1,6 @@
-package kr.joyful.doit.model.common;
+package kr.joyful.doit.domain.common;
 
 import lombok.Getter;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
