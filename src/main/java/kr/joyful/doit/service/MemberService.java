@@ -1,7 +1,7 @@
 package kr.joyful.doit.service;
 
-import kr.joyful.doit.entity.Member;
-import kr.joyful.doit.repository.MemberRepository;
+import kr.joyful.doit.model.member.Member;
+import kr.joyful.doit.model.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

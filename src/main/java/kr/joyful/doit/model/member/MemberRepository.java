@@ -1,6 +1,5 @@
-package kr.joyful.doit.repository;
+package kr.joyful.doit.model.member;
 
-import kr.joyful.doit.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {

@@ -1,23 +1,21 @@
 package kr.joyful.doit.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.joyful.doit.service.MemberService;
 import kr.joyful.doit.web.dto.MemberJoinRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MemberController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class MemberControllerTest {
 
     @Autowired
@@ -26,14 +24,9 @@ class MemberControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @MockBean
-    private MemberService memberService;
-
     @Test
     @DisplayName("body에 아무것도 없이 회원가입. 400에러 기대")
     void expected_40x_error() throws Exception {
-
-        given(memberService.join(any())).willReturn(1L);
 
         mockMvc.perform(post("/api/member"))
                 .andDo(print())
@@ -51,7 +44,6 @@ class MemberControllerTest {
 
         MemberJoinRequestDto memberDto = createMockMemberDto(email, username, password, password2);
 
-        given(memberService.join(any())).willReturn(1L);
 
         mockMvc.perform(post("/api/member")
                     .content(objectMapper.writeValueAsString(memberDto))
@@ -68,8 +60,6 @@ class MemberControllerTest {
         String password2 = "1234";
 
         MemberJoinRequestDto memberDto = createMockMemberDto(email, username, password, password2);
-
-        given(memberService.join(any())).willReturn(1L);
 
         mockMvc.perform(post("/api/member")
                 .content(objectMapper.writeValueAsString(memberDto))
