@@ -20,4 +20,17 @@ public class Board extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
+
+    private String title;
+    private String description;
+
+    private Board(Team team, String title, String description) {
+        this.team = team;
+        this.title = title;
+        this.description = description;
+    }
+
+    public static Board create(Team team, String title, String description) {
+        return new Board(team, title, description);
+    }
 }

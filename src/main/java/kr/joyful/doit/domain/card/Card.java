@@ -24,4 +24,15 @@ public class Card extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
+
+    private Card(String title, String description, CardStatus status, Board board) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.board = board;
+    }
+
+    public static Card create(String title, String description, CardStatus status, Board board) {
+        return new Card(title, description, status, board);
+    }
 }
