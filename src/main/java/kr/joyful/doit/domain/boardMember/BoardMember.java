@@ -1,27 +1,25 @@
-package kr.joyful.doit.domain.teamMember;
+package kr.joyful.doit.domain.boardMember;
 
+import kr.joyful.doit.domain.board.Board;
 import kr.joyful.doit.domain.member.Member;
-import kr.joyful.doit.domain.team.Team;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class TeamMember {
+public class BoardMember {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "team_member_id")
+    @Column(name = "board_member_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
-    private Team team;
+    @JoinColumn(name = "board_id")
+    private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
