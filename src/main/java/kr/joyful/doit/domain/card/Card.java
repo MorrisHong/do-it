@@ -1,6 +1,7 @@
 package kr.joyful.doit.domain.card;
 
 import kr.joyful.doit.domain.board.Board;
+import kr.joyful.doit.domain.cardList.CardList;
 import kr.joyful.doit.domain.common.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,17 +23,17 @@ public class Card extends BaseEntity {
     private CardStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @JoinColumn(name = "card_list_id")
+    private CardList cardList;
 
-    private Card(String title, String description, CardStatus status, Board board) {
+    private Card(String title, String description, CardStatus status, CardList cardList) {
         this.title = title;
         this.description = description;
         this.status = status;
-        this.board = board;
+        this.cardList = cardList;
     }
 
-    public static Card create(String title, String description, CardStatus status, Board board) {
-        return new Card(title, description, status, board);
+    public static Card create(String title, String description, CardStatus status, CardList cardList) {
+        return new Card(title, description, status, cardList);
     }
 }
