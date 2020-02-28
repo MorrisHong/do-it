@@ -12,7 +12,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/error", "/login", "/logout", "/register", "/api/**").permitAll()
+                    .antMatchers("/", "/error", "/login", "/logout", "/register", "/api/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
@@ -28,6 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**", "/js/**", "/css/**", "/images/**", "/favicon.ico");
+        web.ignoring().antMatchers("/static/**", "/js/**", "/css/**", "/images/**", "/favicon.ico", "/fonts/**");
     }
 }
