@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import Vuelidate from 'vuelidate';
+import vuetify from '@/plugins/vuetify'
+import '@mdi/font/css/materialdesignicons.css'
 
 Vue.use(Vuelidate)
 
@@ -21,5 +23,6 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')
