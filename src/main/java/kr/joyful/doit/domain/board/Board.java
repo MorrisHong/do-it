@@ -1,7 +1,6 @@
 package kr.joyful.doit.domain.board;
 
 import kr.joyful.doit.domain.common.BaseEntity;
-import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.team.Team;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,7 +18,7 @@ public class Board extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private Team team;
 
     private String title;
