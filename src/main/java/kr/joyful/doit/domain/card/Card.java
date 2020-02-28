@@ -23,7 +23,7 @@ public class Card extends BaseEntity {
     private CardStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_list_id")
+    @JoinColumn(name = "card_list_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private CardList cardList;
 
     private Card(String title, String description, CardStatus status, CardList cardList) {
