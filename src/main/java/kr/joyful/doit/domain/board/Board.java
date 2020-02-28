@@ -1,6 +1,7 @@
 package kr.joyful.doit.domain.board;
 
 import kr.joyful.doit.domain.common.BaseEntity;
+import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.team.Team;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class Board extends BaseEntity {
 
     private String title;
     private String description;
+
 
     private Board(Team team, String title, String description) {
         this.team = team;

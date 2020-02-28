@@ -6,6 +6,8 @@ import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -28,8 +30,9 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
+
     @Builder
-    public Member(String email, String username, String password, MemberRole role, Team team) {
+    public Member(String email, String username, String password, MemberRole role) {
         this.email = email;
         this.username = username;
         this.password = password;
@@ -40,7 +43,7 @@ public class Member extends BaseTimeEntity {
         this.password = passwordEncode.encode(password);
     }
 
-    public static Member create(String email, String username, String password, MemberRole role, Team team) {
-        return new Member(email, username, password, role, team);
+    public static Member create(String email, String username, String password, MemberRole role) {
+        return new Member(email, username, password, role);
     }
 }
