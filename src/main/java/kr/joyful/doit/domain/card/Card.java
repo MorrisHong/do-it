@@ -20,6 +20,7 @@ public class Card extends BaseEntity {
 
     private String title;
     private String description;
+    @Enumerated(EnumType.STRING)
     private CardStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
