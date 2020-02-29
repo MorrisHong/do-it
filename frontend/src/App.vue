@@ -53,8 +53,9 @@
       right
       temporary
     />
-
-    <router-view/>
+    <v-content>
+      <router-view/> 
+    </v-content>
 
     <v-footer
       app
