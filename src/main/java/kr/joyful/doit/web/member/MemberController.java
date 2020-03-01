@@ -19,7 +19,7 @@ import java.net.URISyntaxException;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberValidator validator;
+    private final MemberJoinRequestDto.MemberValidator validator;
 
     @PostMapping("/api/member")
     public ResponseEntity<?> join(@Valid @RequestBody MemberJoinRequestDto dto, BindingResult bindingResult) throws URISyntaxException {
