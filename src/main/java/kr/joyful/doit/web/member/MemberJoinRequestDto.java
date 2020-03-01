@@ -1,5 +1,6 @@
 package kr.joyful.doit.web.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kr.joyful.doit.domain.member.Member;
 import lombok.Builder;
 import lombok.Data;
@@ -7,10 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 public class MemberJoinRequestDto {
@@ -45,19 +43,8 @@ public class MemberJoinRequestDto {
                 .build();
     }
 
-    @Component
-    static class MemberValidator implements Validator{
-        @Override
-        public boolean supports(Class<?> clazz) {
-            return MemberJoinRequestDto.class.equals(clazz);
-        }
-
-        @Override
-        public void validate(Object target, Errors errors) {
-            MemberJoinRequestDto dto = (MemberJoinRequestDto) target;
-            if (!dto.getPassword().equals(dto.getPassword2())) {
-                errors.reject("wrongPassword");
-            }
-        }
+    @AssertTrue(message = "비밀번호가 서로 다릅니다.")
+    private boolean isValidPassword() {
+        return this.password.equals(this.password2);
     }
 }
