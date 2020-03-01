@@ -5,7 +5,7 @@ import kr.joyful.doit.config.RestDocsConfiguration;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRepository;
 import kr.joyful.doit.domain.member.MemberRole;
-import kr.joyful.doit.web.dto.MemberJoinRequestDto;
+import kr.joyful.doit.web.member.dto.MemberJoinRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,6 @@ class MemberControllerTest {
 
         mockMvc.perform(post("/api/member")
                     .content(objectMapper.writeValueAsString(memberDto))
-                    .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -122,6 +121,25 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("email").value(email))
                 .andExpect(jsonPath("username").value(username));
+    }
+
+    @Test
+    @DisplayName("password, password2가 서로 다를 때")
+    void password_invalid() throws Exception {
+        //given
+        String email = "mock@email.com";
+        String username = "mockMember";
+        String password = "123456";
+        String password2 = "123455";
+
+        MemberJoinRequestDto mockMemberDto = createMockMemberDto(email, username, password, password2);
+
+        //when, then
+        mockMvc.perform(post("/api/member")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(mockMemberDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     private MemberJoinRequestDto createMockMemberDto(String email, String username, String password, String password2) {
