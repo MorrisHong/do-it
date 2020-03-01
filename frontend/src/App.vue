@@ -4,6 +4,7 @@
     <v-navigation-drawer
       v-model="drawerRight"
       app
+      disable-resize-watcher="false"
       clipped
       right
     >
@@ -42,6 +43,7 @@
 
     <v-navigation-drawer
       v-model="drawer"
+      disable-resize-watcher="false"
       app
     >
       <v-list dense>
@@ -50,7 +52,7 @@
             <v-icon>mdi-exit-to-app</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Open Temporary Drawer</v-list-item-title>
+            <v-list-item-title>Open Temporary Drawer2</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
