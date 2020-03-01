@@ -1,78 +1,79 @@
 <template>
   <v-content class="ma-12 pa-2">
     <v-container>
-    <h1>개인 보드</h1>
-    <draggable
-      v-model="rows"
-      tag="v-layout"
-      class="row wrap align-center sortable-list"
-    >
-      <v-flex
-        v-for="row in rows"
-        :key="row.index"
-        class="sortable row-v"
-        xs4
-        pa-3
+      <h1>개인 보드</h1>
+      <draggable
+        v-model="rows"
+        tag="v-layout"
+        class="row wrap align-center sortable-list"
       >
-        <v-card 
-          style="height: 200px; border: 2px solid #eee;"
+        <v-flex
+          v-for="row in rows"
+          :key="row.index"
+          class="sortable row-v"
+          xs4
+          pa-3
         >
-          <v-card-text style="height: 120px; overflow: hidden;">
-            <p class="display-1 text--primary">
-              {{ row.title }}
-            </p>
-            <div class="text--primary">
-              {{ row.description}}
-            </div>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              text
-              color="deep-purple accent-4"
-            >
-              More
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
-    </draggable>
-    <v-divider></v-divider>
-    <h1>미니 프로젝트 보드</h1>
-    <draggable
-      v-model="rows"
-      tag="v-layout"
-      class="row wrap align-center sortable-list"
-    >
-      <v-flex
-        v-for="row in rows"
-        :key="row.index"
-        class="sortable row-v"
-        xs4
-        pa-3
+          <v-card 
+            style="height: 200px; border: 2px solid #eee;"
+          >
+            <v-card-text style="height: 120px; overflow: hidden;">
+              <p class="display-1 text--primary">
+                {{ row.title }}
+              </p>
+              <div class="text--primary">
+                {{ row.description}}
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                text
+                color="deep-purple accent-4"
+                href="/detail"
+              >
+                More
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </draggable>
+      <v-divider></v-divider>
+      <h1>미니 프로젝트 보드</h1>
+      <draggable
+        v-model="rows"
+        tag="v-layout"
+        class="row wrap align-center sortable-list"
       >
-        <v-card 
-          style="height: 200px; border: 2px solid #eee;"
+        <v-flex
+          v-for="row in rows"
+          :key="row.index"
+          class="sortable row-v"
+          xs4
+          pa-3
         >
-          <v-card-text style="height: 120px; overflow: hidden;">
-            <p class="display-1 text--primary">
-              {{ row.title }}
-            </p>
-            <div class="text--primary">
-              {{ row.description}}
-            </div>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              text
-              color="deep-purple accent-4"
-            >
-              More
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
-    </draggable>
-  </v-container>
+          <v-card 
+            style="height: 200px; border: 2px solid #eee;"
+          >
+            <v-card-text style="height: 120px; overflow: hidden;">
+              <p class="display-1 text--primary">
+                {{ row.title }}
+              </p>
+              <div class="text--primary">
+                {{ row.description}}
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                text
+                color="deep-purple accent-4"
+              >
+                More
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </draggable>
+    </v-container>
   </v-content>
 </template>
 

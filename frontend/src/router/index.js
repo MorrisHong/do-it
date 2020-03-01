@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import MainPage from '@/views/MainPage'
 import LoginPage from '@/views/LoginPage'
 import RegisterPage from '@/views/RegisterPage'
+import DetailPage from '@/views/DetailPage'
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/register',
       name: 'RegisterPage',
       component: RegisterPage
+    },
+    {
+      path: '/detail',
+      name: 'DetailPage',
+      component: DetailPage
     }
   ]
 })
