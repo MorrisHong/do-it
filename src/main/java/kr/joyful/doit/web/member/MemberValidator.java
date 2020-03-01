@@ -1,4 +1,4 @@
-package kr.joyful.doit.web.member.dto;
+package kr.joyful.doit.web.member;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
