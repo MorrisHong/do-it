@@ -1,6 +1,7 @@
 package kr.joyful.doit.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.joyful.doit.config.RestDocsConfiguration;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRepository;
 import kr.joyful.doit.domain.member.MemberRole;
@@ -8,11 +9,18 @@ import kr.joyful.doit.web.dto.MemberJoinRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -21,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 class MemberControllerTest {
 
     @Autowired
@@ -55,9 +65,26 @@ class MemberControllerTest {
 
         mockMvc.perform(post("/api/member")
                     .content(objectMapper.writeValueAsString(memberDto))
+                    .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+
+                .andDo(document(
+                        "create-member",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type Header")
+                        ),
+                        requestFields(
+                                fieldWithPath("email").description("사용자의 이메일주소"),
+                                fieldWithPath("username").description("사용자가 사이트 내에서 사용할 이름"),
+                                fieldWithPath("password").description("사용자의 비밀번호"),
+                                fieldWithPath("password2").description("사용자의 비밀번호 확인")
+                        ),
+                        responseHeaders(
+                                headerWithName(HttpHeaders.LOCATION).description("Location Header")
+                        )
+                ));
     }
 
     @Test
@@ -89,7 +116,8 @@ class MemberControllerTest {
         Member saveMember = memberRepository.save(member);
 
         //when, then
-        mockMvc.perform(get("/api/member/{memberId}", saveMember.getId()))
+        mockMvc.perform(get("/api/member/{memberId}", saveMember.getId())
+                    .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("email").value(email))

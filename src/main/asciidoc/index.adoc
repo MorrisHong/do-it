@@ -1,0 +1,18 @@
+= Do It!
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:operation-curl-request-title: Example request
+:operation-http-response-title: Example response
+
+[[Member]]
+== 회원
+[[Member-create]]
+=== 회원가입
+
+`POST`요청을 이용해 회원가입을 할 수 있다.
+
+operation::create-member[snippets='request-fields,curl-request,http-request,request-headers,http-response,response-headers']
