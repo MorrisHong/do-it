@@ -4,7 +4,7 @@
     <v-navigation-drawer
       v-model="drawerRight"
       app
-      disable-resize-watcher="false"
+      disable-resize-watcher
       clipped
       right
     >
@@ -27,15 +27,32 @@
       dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>Do-it!</v-toolbar-title>
+      <v-toolbar-title>
+        <router-link to="/" class="toolbar-title">Do it!</router-link>
+      </v-toolbar-title>
       <v-spacer />
       <div>
-        <v-select
-          :items="items"
-          label="dev.sup2is@gmail.com"
-          class="mt-5"
-          single-line
-        ></v-select>
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              v-on="on"
+              color="white"
+              class="black--text text-lowercase"
+            >
+              dev.sup2is@gmail.com
+              <v-icon>mdi-chevron-down</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in items"
+              :key="index"
+              @click="target(item.value)"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </div>
 
       <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />
@@ -43,7 +60,7 @@
 
     <v-navigation-drawer
       v-model="drawer"
-      disable-resize-watcher="false"
+      disable-resize-watcher
       app
     >
       <v-list dense>
@@ -93,7 +110,22 @@
       drawerRight: false,
       right: false,
       left: false,
-      items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+      items: [
+        {title: '내 정보 보기', value: '/my'},
+        {title: '로그아웃', value: '/logout'}
+      ],
     }),
+    methods: {
+      target(value) {
+        this.$router.push(value)
+      }
+    }
   }
 </script>
+
+<style scoped>
+  .toolbar-title {
+    color: white;
+    text-decoration: none;
+  }
+</style>
