@@ -28,6 +28,15 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>Do-it!</v-toolbar-title>
       <v-spacer />
+      <div>
+        <v-select
+          :items="items"
+          label="dev.sup2is@gmail.com"
+          class="mt-5"
+          single-line
+        ></v-select>
+      </div>
+
       <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />
     </v-app-bar>
 
@@ -82,6 +91,7 @@
       drawerRight: false,
       right: false,
       left: false,
+      items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
     }),
   }
 </script>
