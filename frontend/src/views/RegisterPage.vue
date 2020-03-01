@@ -1,104 +1,86 @@
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="register-form">
-        <form @submit.prevent="submitForm">
-          <h1> Do It ! </h1>
-          <div v-show="errorMessage" class="alert alert-danger failed">{{ errorMessage }}</div>
-          <div class="form-group">
-            <label for="email">이메일</label>
-            <input type="email" class="form-control" id="email" v-model="form.email">
-          </div>
-          <div class="form-group">
-            <label for="username">닉네임</label>
-            <input type="text" class="form-control" id="username" v-model="form.username"/>
-          </div>
-          <div class="form-group">
-            <label for="password">비밀번호</label>
-            <input type="password" class="form-control" id="password" v-model="form.password"/>
-          </div>
-          <div class="form-group">
-            <label for="password2">비밀번호 확인</label>
-            <input type="password" class="form-control" id="password2" v-model="form.password2"/>
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">
-            회원가입
-          </button>
-        </form>
-      </div>
-    </div>
-    <footer class="footer">
-      <span class="copyright">joyful</span>
-      <ul class="footer-link list-inline float-right"></ul>
-    </footer>
-  </div>
+  <v-container
+    fluid
+    fill-height
+  >
+    <v-layout
+      align-center
+      justify-center
+    >
+      <v-flex
+        xs12
+        sm8
+      >
+        <v-card class="elevation-12">
+          <v-toolbar
+            color="blue-grey"
+            dark
+            flat
+          >
+            <v-toolbar-title>Sign Up</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+          <v-card-text>
+            <v-form>
+              <v-text-field
+                label="ID"
+                name="id"
+                prepend-icon="mdi-account"
+                type="text"
+              ></v-text-field>
+
+              <v-text-field
+                id="password"
+                label="Password"
+                name="password"
+                prepend-icon="mdi-lock"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showPassword ? 'text' : 'password'"
+                @click:append="showPassword = !showPassword"
+              ></v-text-field>
+              <v-text-field
+                id="password-confirm"
+                label="Password Confirm"
+                name="password-confirm"
+                prepend-icon="mdi-lock-outline"
+                :append-icon="showPasswordConfirm ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="showPasswordConfirm ? 'text' : 'password'"
+                @click:append="showPasswordConfirm = !showPasswordConfirm"
+              ></v-text-field>
+              <v-text-field
+                id="email"
+                label="Email"
+                name="password"
+                prepend-icon="mdi-email"
+                type="email"
+              ></v-text-field>
+              <v-text-field
+                id="username"
+                label="Username"
+                name="username"
+                prepend-icon="mdi-account-box-outline"
+                type="text"
+              ></v-text-field>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue-grey" class="white--text">Submit</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-  import {required, email, minLength, maxLength, alphaNum} from 'vuelidate/lib/validators'
-  import registrationService from '@/services/registration'
   export default {
-    name: "RegisterPage",
-    data: function () {
-      return {
-        form: {
-          email: '',
-          username: '',
-          password: '',
-          password2: '',
-          errorMessage: ''
-        }
-      }
+    props: {
+      source: String,
     },
-    validations: {
-      form: {
-        username: {
-          required,
-          minLength: minLength(2),
-          maxLength: maxLength(50),
-          alphaNum
-        },
-        email: {
-          required,
-          email,
-          maxLength: maxLength(100)
-        },
-        password: {
-          required,
-          minLength:minLength(6),
-          maxLength:maxLength(30)
-        }
-      }
-    },
-    methods: {
-      submitForm () {
-        this.$v.$touch()
-        if(this.$v.$invalid) {
-          return
-        }
-        registrationService.register(this.form).then( () => {
-          this.$router.push({name: 'LoginPage'})
-        }).catch( (error) => {
-          this.errorMessage = 'Falied to register member'
-        })
-      }
-    }
+    data: () => ({
+      showPassword: false,
+      showPasswordConfirm: false
+    }),
   }
 </script>
-
-<style lang="scss" scoped>
-  .container {
-    max-width: 900px;
-  }
-
-  .register-form {
-    margin-top: 50px;
-    max-width: 320px;
-  }
-
-  .footer {
-    width: 100%;
-    line-height: 40px;
-    margin-top: 50px;
-  }
-</style>
