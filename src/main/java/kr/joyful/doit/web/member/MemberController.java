@@ -2,9 +2,6 @@ package kr.joyful.doit.web.member;
 
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.service.member.MemberService;
-import kr.joyful.doit.web.member.dto.MemberJoinRequestDto;
-import kr.joyful.doit.web.member.dto.MemberResponseDto;
-import kr.joyful.doit.web.member.dto.MemberValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

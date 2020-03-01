@@ -1,4 +1,4 @@
-package kr.joyful.doit.web.member.dto;
+package kr.joyful.doit.web.member;
 
 import kr.joyful.doit.domain.member.Member;
 import lombok.Builder;

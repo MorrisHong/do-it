@@ -5,7 +5,7 @@ import kr.joyful.doit.config.RestDocsConfiguration;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRepository;
 import kr.joyful.doit.domain.member.MemberRole;
-import kr.joyful.doit.web.member.dto.MemberJoinRequestDto;
+import kr.joyful.doit.web.member.MemberJoinRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
