@@ -19,16 +19,13 @@ import java.net.URISyntaxException;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberJoinRequestDto.MemberValidator validator;
 
     @PostMapping("/api/member")
     public ResponseEntity<?> join(@Valid @RequestBody MemberJoinRequestDto dto, BindingResult bindingResult) throws URISyntaxException {
-        validator.validate(dto, bindingResult);
         if(bindingResult.hasErrors()) {
             bindingResult.getAllErrors().stream().map(ObjectError::toString).forEach(log::error);
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
-
         memberService.join(dto.toEntity());
         URI url = new URI("/login");
         return ResponseEntity.created(url).build();
@@ -36,7 +33,7 @@ public class MemberController {
 
     @GetMapping("/api/member/{memberId}")
     public ResponseEntity<MemberResponseDto> findMember(@PathVariable Long memberId) {
-        Member member = memberService.findMember(memberId);
+        Member member = memberService.findMemberById(memberId);
         MemberResponseDto dto = new MemberResponseDto(member);
         return ResponseEntity.ok(dto);
     }

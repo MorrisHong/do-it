@@ -1,7 +1,6 @@
 package kr.joyful.doit.service.member;
 
 import kr.joyful.doit.domain.member.Member;
-import kr.joyful.doit.domain.member.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -28,9 +27,9 @@ class MemberServiceTest {
 
         Long memberId = memberService.join(member);
 
-        given(memberService.findMember(memberId)).willReturn(member);
+        given(memberService.findMemberById(memberId)).willReturn(member);
 
-        Member findMember = memberService.findMember(memberId);
+        Member findMember = memberService.findMemberById(memberId);
 
         assertEquals(findMember.getEmail(), member.getEmail());
     }
