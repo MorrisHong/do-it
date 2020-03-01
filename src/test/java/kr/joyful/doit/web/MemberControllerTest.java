@@ -1,6 +1,9 @@
 package kr.joyful.doit.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.joyful.doit.domain.member.Member;
+import kr.joyful.doit.domain.member.MemberRepository;
+import kr.joyful.doit.domain.member.MemberRole;
 import kr.joyful.doit.web.dto.MemberJoinRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,8 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -19,7 +24,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MemberControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -66,6 +74,26 @@ class MemberControllerTest {
                     .content(objectMapper.writeValueAsString(memberDto))
                     .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("id로 회원찾기")
+    void findMember() throws Exception {
+        //given
+        String email = "mock@email.com";
+        String username = "mockMember";
+        String password = "1234";
+        MemberRole role = MemberRole.MEMBER;
+
+        Member member = new Member(email, username, password, role);
+        Member saveMember = memberRepository.save(member);
+
+        //when, then
+        mockMvc.perform(get("/api/member/{memberId}", saveMember.getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("email").value(email))
+                .andExpect(jsonPath("username").value(username));
     }
 
     private MemberJoinRequestDto createMockMemberDto(String email, String username, String password, String password2) {

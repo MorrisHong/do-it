@@ -17,7 +17,8 @@ import java.util.List;
 @Entity
 public class Team extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "team_id")
     private Long id;
 
@@ -25,8 +26,7 @@ public class Team extends BaseEntity {
 
     private String description;
 
-    @OneToMany
-    @JoinColumn(name = "member_id")
-    private List<Member> members = new ArrayList<>();
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    private Member member;
 }
