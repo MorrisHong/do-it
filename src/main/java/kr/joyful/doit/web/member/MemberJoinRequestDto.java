@@ -3,6 +3,7 @@ package kr.joyful.doit.web.member;
 import kr.joyful.doit.domain.member.Member;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -42,5 +43,21 @@ public class MemberJoinRequestDto {
                 .username(username)
                 .password(password)
                 .build();
+    }
+
+    @Component
+    static class MemberValidator implements Validator{
+        @Override
+        public boolean supports(Class<?> clazz) {
+            return MemberJoinRequestDto.class.equals(clazz);
+        }
+
+        @Override
+        public void validate(Object target, Errors errors) {
+            MemberJoinRequestDto dto = (MemberJoinRequestDto) target;
+            if (!dto.getPassword().equals(dto.getPassword2())) {
+                errors.reject("wrongPassword");
+            }
+        }
     }
 }
