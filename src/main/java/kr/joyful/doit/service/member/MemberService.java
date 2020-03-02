@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -24,13 +24,14 @@ public class MemberService implements UserDetailsService{
     private final PasswordEncoder passwordEncode;
 
     public Long join(Member member) {
+        ifExistsMemberThrowException(member);
         member.encodePassword(passwordEncode);
         memberRepository.save(member);
         return member.getId();
     }
 
     @Transactional(readOnly = true)
-    public Member findMember(Long id) {
+    public Member findMemberById(Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException(id));
     }
 
@@ -54,6 +55,14 @@ public class MemberService implements UserDetailsService{
                     .password(member.getPassword())
                     .roles(member.getRole().name())
                     .build();
+        }
+    }
+
+    private void ifExistsMemberThrowException(Member member) {
+        Optional<Member> byEmail = memberRepository.findByEmail(member.getEmail());
+        Optional<Member> byUsername = memberRepository.findByUsername(member.getUsername());
+        if (byEmail.isPresent() || byUsername.isPresent()) {
+            throw new MemberAlreadyExistsException();
         }
     }
 }

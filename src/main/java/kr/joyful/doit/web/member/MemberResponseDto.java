@@ -1,10 +1,10 @@
-package kr.joyful.doit.web.dto;
+package kr.joyful.doit.web.member;
 
 import kr.joyful.doit.domain.member.Member;
 import lombok.Data;
 
 @Data
-public class MemberResponseDto {
+class MemberResponseDto {
 
     private String email;
     private String username;

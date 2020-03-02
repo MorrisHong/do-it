@@ -1,9 +1,7 @@
-package kr.joyful.doit.web;
+package kr.joyful.doit.web.member;
 
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.service.member.MemberService;
-import kr.joyful.doit.web.dto.MemberJoinRequestDto;
-import kr.joyful.doit.web.dto.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +24,7 @@ public class MemberController {
     public ResponseEntity<?> join(@Valid @RequestBody MemberJoinRequestDto dto, BindingResult bindingResult) throws URISyntaxException {
         if(bindingResult.hasErrors()) {
             bindingResult.getAllErrors().stream().map(ObjectError::toString).forEach(log::error);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
         memberService.join(dto.toEntity());
         URI url = new URI("/login");
@@ -35,7 +33,7 @@ public class MemberController {
 
     @GetMapping("/api/member/{memberId}")
     public ResponseEntity<MemberResponseDto> findMember(@PathVariable Long memberId) {
-        Member member = memberService.findMember(memberId);
+        Member member = memberService.findMemberById(memberId);
         MemberResponseDto dto = new MemberResponseDto(member);
         return ResponseEntity.ok(dto);
     }
