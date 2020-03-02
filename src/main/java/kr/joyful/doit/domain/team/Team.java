@@ -28,5 +28,18 @@ public class Team extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
-    private Member member;
+    private Member owner;
+
+    private int position;
+
+    private Team(String name, String description, Member owner, int position) {
+        this.name = name;
+        this.description = description;
+        this.owner = owner;
+        this.position = position;
+    }
+
+    public static Team create(String name, String description, Member owner, int position) {
+        return new Team(name, description, owner, position);
+    }
 }
