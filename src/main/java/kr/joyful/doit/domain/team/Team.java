@@ -1,16 +1,13 @@
 package kr.joyful.doit.domain.team;
 
-import kr.joyful.doit.domain.board.Board;
 import kr.joyful.doit.domain.common.BaseEntity;
-import kr.joyful.doit.domain.common.BaseTimeEntity;
 import kr.joyful.doit.domain.member.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,6 +29,7 @@ public class Team extends BaseEntity {
 
     private int position;
 
+    @Builder
     private Team(String name, String description, Member owner, int position) {
         this.name = name;
         this.description = description;
