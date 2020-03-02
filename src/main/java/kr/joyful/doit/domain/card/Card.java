@@ -27,14 +27,17 @@ public class Card extends BaseEntity {
     @JoinColumn(name = "card_list_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private CardList cardList;
 
-    private Card(String title, String description, CardStatus status, CardList cardList) {
+    private int position;
+
+    private Card(String title, String description, CardStatus status, CardList cardList, int position) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.cardList = cardList;
+        this.position = position;
     }
 
-    public static Card create(String title, String description, CardStatus status, CardList cardList) {
-        return new Card(title, description, status, cardList);
+    public static Card create(String title, String description, CardStatus status, CardList cardList, int position) {
+        return new Card(title, description, status, cardList, position);
     }
 }

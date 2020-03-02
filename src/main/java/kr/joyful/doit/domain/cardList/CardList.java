@@ -22,4 +22,6 @@ public class CardList extends BaseEntity {
     private Board board;
 
     private String name;
+
+    private int position;
 }
