@@ -2,7 +2,9 @@ package kr.joyful.doit.service.member;
 
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRepository;
+import kr.joyful.doit.web.member.MemberInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -36,26 +39,14 @@ public class MemberService implements UserDetailsService{
     }
 
     @Override
-    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        if(StringUtils.isEmpty(usernameOrEmail)) {
-            throw new UsernameNotFoundException(usernameOrEmail);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        if(StringUtils.isEmpty(email)) {
+            throw new UsernameNotFoundException(email);
         }
 
-        if (usernameOrEmail.contains("@")) {
-            Member member = memberRepository.findByEmail(usernameOrEmail).orElseThrow(() -> new UsernameNotFoundException(usernameOrEmail));
-            return User.builder()
-                    .username(member.getEmail())
-                    .password(member.getPassword())
-                    .roles(member.getRole().name())
-                    .build();
-        } else {
-            Member member = memberRepository.findByUsername(usernameOrEmail).orElseThrow(() -> new UsernameNotFoundException(usernameOrEmail));
-            return User.builder()
-                    .username(member.getUsername())
-                    .password(member.getPassword())
-                    .roles(member.getRole().name())
-                    .build();
-        }
+        Member findMember = memberRepository.findByEmail(email).orElseThrow(() -> new MemberNotFoundException(email));
+
+        return new MemberInfo(findMember);
     }
 
     private void ifExistsMemberThrowException(Member member) {
