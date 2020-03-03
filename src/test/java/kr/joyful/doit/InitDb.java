@@ -18,12 +18,22 @@ public class InitDb implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Member member = Member.builder()
-                .username("member")
-                .email("member@example.com")
+        Member member1 = Member.builder()
+                .username("member1")
+                .email("member1@example.com")
                 .password("1234")
                 .role(MemberRole.MEMBER)
                 .build();
-        memberService.join(member);
+        memberService.join(member1);
+
+        Member member2 = Member.builder()
+                .username("member")
+                .email("member2@example.com")
+                .password("1234")
+                .role(MemberRole.MEMBER)
+                .build();
+        memberService.join(member2);
+
+
     }
 }

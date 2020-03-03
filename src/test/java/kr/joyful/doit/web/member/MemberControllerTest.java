@@ -1,4 +1,4 @@
-package kr.joyful.doit.web;
+package kr.joyful.doit.web.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.joyful.doit.config.RestDocsConfiguration;
@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 @Import(RestDocsConfiguration.class)
 @Transactional
+@ActiveProfiles("test")
 class MemberControllerTest {
 
     @Autowired
