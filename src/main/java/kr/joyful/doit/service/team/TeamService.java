@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -14,6 +16,10 @@ public class TeamService {
     private final TeamRepository teamRepository;
 
     public Long createTeam(Team team) {
+        Optional<Team> teamByName = teamRepository.findTeamByNameAndOwner(team.getName(), team.getOwner());
+        if (teamByName.isPresent()) {
+            throw new TeamAlreadyExistsException(team.getName());
+        }
         teamRepository.save(team);
         return team.getId();
     }

@@ -1,13 +1,10 @@
 package kr.joyful.doit.domain.member;
 
 import kr.joyful.doit.domain.common.BaseTimeEntity;
-import kr.joyful.doit.domain.team.Team;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
