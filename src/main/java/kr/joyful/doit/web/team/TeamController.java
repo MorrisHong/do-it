@@ -1,15 +1,11 @@
 package kr.joyful.doit.web.team;
 
-import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.team.Team;
 import kr.joyful.doit.service.team.TeamService;
 import kr.joyful.doit.web.member.CurrentUser;
 import kr.joyful.doit.web.member.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
