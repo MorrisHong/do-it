@@ -3,6 +3,7 @@ package kr.joyful.doit.domain.cardList;
 import kr.joyful.doit.domain.board.Board;
 import kr.joyful.doit.domain.common.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,13 @@ public class CardList extends BaseEntity {
     private Board board;
 
     private String name;
+
+    private int position;
+
+    @Builder
+    private CardList(Board board, String name, int position) {
+        this.board = board;
+        this.name = name;
+        this.position = position;
+    }
 }

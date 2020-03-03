@@ -24,14 +24,17 @@ public class Board extends BaseEntity {
     private String title;
     private String description;
 
+    private int position;
 
-    private Board(Team team, String title, String description) {
+
+    private Board(Team team, String title, String description, int position) {
         this.team = team;
         this.title = title;
         this.description = description;
+        this.position = position;
     }
 
-    public static Board create(Team team, String title, String description) {
-        return new Board(team, title, description);
+    public static Board create(Team team, String title, String description, int position) {
+        return new Board(team, title, description, position);
     }
 }
