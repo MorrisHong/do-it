@@ -8,6 +8,7 @@ import vuetify from '@/plugins/vuetify'
 import '@mdi/font/css/materialdesignicons.css'
 
 Vue.use(Vuelidate)
+export const EventBus = new Vue()
 
 axios.defaults.baseURL = '/api'
 axios.defaults.headers.common.Accept = 'application/json'

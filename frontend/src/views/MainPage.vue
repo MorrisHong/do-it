@@ -36,6 +36,21 @@
             </v-card-actions>
           </v-card>
         </v-flex>
+        <v-flex
+          class="sortable row-v"
+          xs4
+          pa-3
+        >
+          <v-card 
+            style="height: 200px; border: 2px solid #eee;"
+          >
+            <v-card-actions style="height: 200px;" class="justify-center">
+              <v-btn x-large @click="boardInputModalOn()">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
       </draggable>
       <v-divider></v-divider>
       <h1>미니 프로젝트 보드</h1>
@@ -72,13 +87,31 @@
             </v-card-actions>
           </v-card>
         </v-flex>
+        <v-flex
+          class="sortable row-v"
+          xs4
+          pa-3
+        >
+          <v-card 
+            style="height: 200px; border: 2px solid #eee;"
+          >
+            <v-card-actions style="height: 200px;" class="justify-center">
+              <v-btn x-large @click="boardInputModalOn()">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
       </draggable>
+      <board-input-modal/>
     </v-container>
   </v-content>
 </template>
 
 <script>
 
+  import { EventBus } from '../main.js'
+  import BoardInputModal from "@/views/BoardInputModal.vue"
   import draggable from "vuedraggable";
 
   export default {
@@ -86,7 +119,8 @@
       source: String,
     },
     components: {
-      draggable
+      draggable,
+      'board-input-modal': BoardInputModal
     },
     data: () => ({
       drawer: null,
@@ -117,5 +151,10 @@
         }
       ]
     }),
+    methods : {
+      boardInputModalOn: function () {
+        EventBus.$emit('boardInputModal', true);
+      }
+    }
   }
 </script>
