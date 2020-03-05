@@ -21,4 +21,6 @@ public class DoItApplication {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+
+
 }

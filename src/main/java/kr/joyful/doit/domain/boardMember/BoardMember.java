@@ -25,4 +25,13 @@ public class BoardMember {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private Member member;
+
+    private BoardMember(Board board, Member member) {
+        this.board = board;
+        this.member = member;
+    }
+
+    public static BoardMember create(Board board, Member member) {
+       return new BoardMember(board, member);
+    }
 }

@@ -23,4 +23,8 @@ public class TeamService {
         teamRepository.save(team);
         return team.getId();
     }
+
+    public Team findTeamById(Long teamId) {
+        return teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException(teamId));
+    }
 }

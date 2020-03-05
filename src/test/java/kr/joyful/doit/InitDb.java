@@ -1,8 +1,12 @@
 package kr.joyful.doit;
 
+import kr.joyful.doit.domain.board.Board;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRole;
+import kr.joyful.doit.domain.team.Team;
+import kr.joyful.doit.service.board.BoardService;
 import kr.joyful.doit.service.member.MemberService;
+import kr.joyful.doit.service.team.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -15,6 +19,8 @@ import org.springframework.test.context.ActiveProfiles;
 public class InitDb implements ApplicationRunner {
 
     private final MemberService memberService;
+    private final TeamService teamService;
+    private final BoardService boardService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
