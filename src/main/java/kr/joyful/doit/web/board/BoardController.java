@@ -33,11 +33,8 @@ public class BoardController {
 
     @GetMapping("/api/board/{boardId}")
     public ResponseEntity<?> findBoardById(@PathVariable Long boardId) {
-        // todo : need refactor
-        Board findBoard = boardService.findById(boardId);
         List<BoardMember> boardMemberList = boardService.findBoardMemberByBoardId(boardId);
-        List<Member> members = boardMemberList.stream().map(BoardMember::getMember).collect(Collectors.toList());
-        BoardResponseDto board = new BoardResponseDto(findBoard,members);
+        BoardResponseDto board = new BoardResponseDto(boardMemberList);
         return ResponseEntity.ok(board);
     }
 }

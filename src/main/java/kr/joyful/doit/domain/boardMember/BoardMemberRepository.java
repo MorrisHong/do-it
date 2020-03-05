@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface BoardMemberRepository extends JpaRepository<BoardMember, Long> {
     @Query("select bm from BoardMember as bm" +
-            " left join fetch bm.member" +
+            " join fetch bm.member" +
+            " join fetch bm.board" +
             " where bm.board.id = :boardId")
     List<BoardMember> findBoardMemberById(Long boardId);
 }

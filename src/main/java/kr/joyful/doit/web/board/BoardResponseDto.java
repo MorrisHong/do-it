@@ -13,12 +13,27 @@ public class BoardResponseDto {
     private String title;
     private String description;
     private String teamName;
-    private List<Member> members;
+    private List<BoardMemberResponseDto> members = new ArrayList<>();
 
-    public BoardResponseDto(Board board, List<Member> members) {
+
+    public BoardResponseDto(List<BoardMember> boardMemberList) {
+        Board board = boardMemberList.get(0).getBoard();
         this.title = board.getTitle();
         this.description = board.getDescription();
         this.teamName = board.getTeam().getName();
-        this.members = members;
+        for (BoardMember boardMember : boardMemberList) {
+            this.members.add(new BoardMemberResponseDto(boardMember.getMember()));
+        }
+    }
+
+    @Getter
+    static class BoardMemberResponseDto {
+        private String username;
+        private String email;
+
+        public BoardMemberResponseDto(Member member) {
+            this.username = member.getUsername();
+            this.email = member.getEmail();
+        }
     }
 }
