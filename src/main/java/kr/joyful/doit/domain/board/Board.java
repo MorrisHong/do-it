@@ -28,25 +28,17 @@ public class Board extends BaseEntity {
     private String title;
     private String description;
 
-    @OneToMany(mappedBy = "board")
-    private List<BoardMember> boardMembers = new ArrayList<>();
-
     private int position;
 
-
     @Builder
-    private Board(Team team, String title, String description, int position) {
+    private Board(Team team, String title, String description) {
         this.team = team;
         this.title = title;
         this.description = description;
-        this.position = position;
     }
 
-    public static Board create(Team team, String title, String description, int position) {
-        return new Board(team, title, description, position);
+    public static Board create(Team team, String title, String description) {
+        return new Board(team, title, description);
     }
 
-    public void inviteMember(BoardMember boardMember) {
-        this.boardMembers.add(boardMember);
-    }
 }

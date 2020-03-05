@@ -38,7 +38,7 @@ class TeamControllerTest {
     @DisplayName("팀만들기 성공")
     @WithUserDetails(userDetailsServiceBeanName = "memberService", value = "member1@example.com")
     void success_create_team() throws Exception {
-        TeamCreateRequestDto dto = new TeamCreateRequestDto("teamA", "this is teamA");
+        TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 
         mockMvc.perform(post("/api/team")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -53,7 +53,7 @@ class TeamControllerTest {
         //given
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
 
-        TeamCreateRequestDto dto = new TeamCreateRequestDto("teamA", "this is teamA");
+        TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 
         mockMvc.perform(post("/api/team")
                 .with(user(userDetails))
@@ -62,7 +62,7 @@ class TeamControllerTest {
                 .andExpect(status().isCreated());
 
         //when & then
-        TeamCreateRequestDto dto2 = new TeamCreateRequestDto("teamA", "this is another teamA");
+        TeamCreateRequestDto dto2 = new TeamCreateRequestDto("test team A", "this is another teamA");
 
         mockMvc.perform(post("/api/team")
                 .with(user(userDetails))
@@ -79,7 +79,7 @@ class TeamControllerTest {
         UserDetails userDetails1 = memberService.loadUserByUsername("member1@example.com");
         UserDetails userDetails2 = memberService.loadUserByUsername("member2@example.com");
 
-        TeamCreateRequestDto dto = new TeamCreateRequestDto("teamA", "this is teamA");
+        TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 
         mockMvc.perform(post("/api/team")
                 .with(user(userDetails1))
@@ -88,7 +88,7 @@ class TeamControllerTest {
                 .andExpect(status().isCreated());
 
         //when & then
-        TeamCreateRequestDto dto2 = new TeamCreateRequestDto("teamA", "this is another teamA");
+        TeamCreateRequestDto dto2 = new TeamCreateRequestDto("test team A", "this is another teamA");
 
         mockMvc.perform(post("/api/team")
                 .with(user(userDetails2))
