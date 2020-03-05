@@ -1,11 +1,14 @@
 package kr.joyful.doit.web.member;
 
 import kr.joyful.doit.domain.member.Member;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
+import javax.persistence.EntityListeners;
 import java.util.List;
 
+@EntityListeners(AuditingEntityListener.class)
 public class MemberInfo extends User {
 
     private Member member;
