@@ -8,8 +8,11 @@ spring:
       ddl-auto: create
     properties:
       format_sql: true
+  profiles:
+    active: test
 
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+    org.springframework.web: debug

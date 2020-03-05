@@ -1,12 +1,16 @@
 package kr.joyful.doit.domain.board;
 
+import kr.joyful.doit.domain.boardMember.BoardMember;
 import kr.joyful.doit.domain.common.BaseEntity;
 import kr.joyful.doit.domain.team.Team;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,9 +28,13 @@ public class Board extends BaseEntity {
     private String title;
     private String description;
 
+    @OneToMany(mappedBy = "board")
+    private List<BoardMember> boardMembers = new ArrayList<>();
+
     private int position;
 
 
+    @Builder
     private Board(Team team, String title, String description, int position) {
         this.team = team;
         this.title = title;
@@ -36,5 +44,9 @@ public class Board extends BaseEntity {
 
     public static Board create(Team team, String title, String description, int position) {
         return new Board(team, title, description, position);
+    }
+
+    public void inviteMember(BoardMember boardMember) {
+        this.boardMembers.add(boardMember);
     }
 }
