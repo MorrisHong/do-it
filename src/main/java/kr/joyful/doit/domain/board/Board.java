@@ -31,15 +31,14 @@ public class Board extends BaseEntity {
     private int position;
 
     @Builder
-    private Board(Team team, String title, String description, int position) {
+    private Board(Team team, String title, String description) {
         this.team = team;
         this.title = title;
         this.description = description;
-        this.position = position;
     }
 
-    public static Board create(Team team, String title, String description, int position) {
-        return new Board(team, title, description, position);
+    public static Board create(Team team, String title, String description) {
+        return new Board(team, title, description);
     }
 
 }

@@ -41,11 +41,12 @@ public class InitDb implements ApplicationRunner {
         Team team = Team.create("teamA", "this is team A", member1, 0);
         teamService.createTeam(team);
 
-        Board board1 = Board.create(team, "BoardA", "this is board A", 0);
+        Board board1 = Board.create(team, "BoardA", "this is board A");
         boardService.save(board1, member1);
+        boardService.invite(board1, member2);
 
 
-        Board board2 = Board.create(team, "BoardB", "this is board B", 1);
+        Board board2 = Board.create(team, "BoardB", "this is board B");
         boardService.save(board2, member1);
 
     }
