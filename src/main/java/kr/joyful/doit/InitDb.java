@@ -11,11 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.test.context.ActiveProfiles;
 
 @Component
 @RequiredArgsConstructor
-@ActiveProfiles("test")
 public class InitDb implements ApplicationRunner {
 
     private final MemberService memberService;
@@ -45,12 +43,10 @@ public class InitDb implements ApplicationRunner {
 
         Board board1 = Board.create(team, "BoardA", "this is board A", 0);
         boardService.save(board1, member1);
-        boardService.invite(board1, member2);
 
 
         Board board2 = Board.create(team, "BoardB", "this is board B", 1);
         boardService.save(board2, member1);
-
 
     }
 }
