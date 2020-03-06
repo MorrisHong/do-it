@@ -1,8 +1,6 @@
 package kr.joyful.doit.web.board;
 
-import kr.joyful.doit.domain.board.Board;
 import kr.joyful.doit.domain.boardMember.BoardMember;
-import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.team.Team;
 import kr.joyful.doit.service.board.BoardService;
 import kr.joyful.doit.service.team.TeamService;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
