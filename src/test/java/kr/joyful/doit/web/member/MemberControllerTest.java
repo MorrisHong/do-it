@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +59,7 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("정상적인 회원가입 201 기대")
+    @WithAnonymousUser
     void successful_join() throws Exception {
         String email = "mockMember@email.com";
         String username = "mockMember";
