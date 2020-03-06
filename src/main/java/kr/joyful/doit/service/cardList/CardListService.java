@@ -17,4 +17,8 @@ public class CardListService {
         cardListRepository.save(cardList);
         return cardList.getId();
     }
+
+    public CardList findById(Long cardListId) {
+        return cardListRepository.findById(cardListId).orElseThrow( () -> new CardListNotFoundException(cardListId));
+    }
 }

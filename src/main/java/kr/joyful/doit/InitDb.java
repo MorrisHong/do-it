@@ -1,10 +1,12 @@
 package kr.joyful.doit;
 
 import kr.joyful.doit.domain.board.Board;
+import kr.joyful.doit.domain.cardList.CardList;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRole;
 import kr.joyful.doit.domain.team.Team;
 import kr.joyful.doit.service.board.BoardService;
+import kr.joyful.doit.service.cardList.CardListService;
 import kr.joyful.doit.service.member.MemberService;
 import kr.joyful.doit.service.team.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class InitDb implements ApplicationRunner {
     private final MemberService memberService;
     private final TeamService teamService;
     private final BoardService boardService;
+    private final CardListService cardListService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -48,6 +51,15 @@ public class InitDb implements ApplicationRunner {
 
         Board board2 = Board.create(team, "BoardB", "this is board B");
         boardService.save(board2, member1);
+
+
+        CardList cardList1 = CardList.builder()
+                .board(board1)
+                .name("testCardList")
+                .position(0)
+                .build();
+        cardListService.addCardList(cardList1);
+
 
     }
 }
