@@ -3,9 +3,7 @@ package kr.joyful.doit.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.springframework.security.core.userdetails.UserDetails;
+import kr.joyful.doit.web.member.MemberInfo;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -40,9 +38,9 @@ public class JwtTokenUtil {
         return expiration.before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails, JwtTokenType tokenType) {
+    public String generateToken(MemberInfo memberInfo, JwtTokenType tokenType) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername(), tokenType);
+        return doGenerateToken(claims, memberInfo.getEmail(), tokenType);
     }
 
     private String doGenerateToken(Map<String, Object> claims, String username, JwtTokenType tokenType) {
@@ -55,9 +53,9 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, MemberInfo memberInfo) {
         final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return (username.equals(memberInfo.getEmail())) && !isTokenExpired(token);
     }
 
 }

@@ -5,12 +5,15 @@ import kr.joyful.doit.domain.board.Board;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.team.Team;
 import kr.joyful.doit.domain.team.TeamRepository;
+import kr.joyful.doit.jwt.JwtTokenType;
+import kr.joyful.doit.jwt.JwtTokenUtil;
 import kr.joyful.doit.service.member.MemberService;
 import kr.joyful.doit.web.member.MemberInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -41,6 +44,9 @@ class BoardControllerTest {
     @Autowired
     TeamRepository teamRepository;
 
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
     @Test
     void basic() throws Exception {
 
@@ -54,13 +60,18 @@ class BoardControllerTest {
                 .teamId(saveTeam.getId()).build();
 
         UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
-        mockMvc.perform(post("/api/board")
+        String token = jwtTokenUtil.generateToken((MemberInfo) userDetail, JwtTokenType.AUTH);
+
+        String boardUrl = "/api/board";
+        mockMvc.perform(post(boardUrl)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .with(user(userDetail))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(boardRequestDto)))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(get("/api/board/{boardId}", 1L))
+        mockMvc.perform(get(boardUrl+ "/{boardId}", 1L)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

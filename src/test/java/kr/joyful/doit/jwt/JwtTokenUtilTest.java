@@ -1,14 +1,14 @@
 package kr.joyful.doit.jwt;
 
+import kr.joyful.doit.service.member.MemberService;
+import kr.joyful.doit.web.member.MemberInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Collections;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,16 +20,18 @@ class JwtTokenUtilTest {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private MemberService memberService;
+
     @Test
     @DisplayName("토큰 발행 테스트")
     public void generate_token() {
         //given
-        String email = "test@gmail.com";
-        String password = "password";
-        UserDetails userDetails = new User(email, password, Collections.emptyList());
+        String email = "member1@example.com";
+        UserDetails userDetails = memberService.loadUserByUsername(email);
 
         //when
-        String token = jwtTokenUtil.generateToken(userDetails, JwtTokenType.AUTH);
+        String token = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.AUTH);
         String extractEmail = jwtTokenUtil.getUsernameFromToken(token);
         Date expiration = jwtTokenUtil.getExpirationDateFromToken(token);
 
@@ -44,12 +46,11 @@ class JwtTokenUtilTest {
     @DisplayName("refresh토큰 발행 테스트")
     public void generate_refreshToken() {
         //given
-        String email = "test@gmail.com";
-        String password = "password";
-        UserDetails userDetails = new User(email, password, Collections.emptyList());
+        String email = "member1@example.com";
+        UserDetails userDetails = memberService.loadUserByUsername(email);
 
         //when
-        String token = jwtTokenUtil.generateToken(userDetails, JwtTokenType.REFRESH);
+        String token = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.REFRESH);
         String extractEmail = jwtTokenUtil.getUsernameFromToken(token);
         Date expiration = jwtTokenUtil.getExpirationDateFromToken(token);
 
@@ -65,14 +66,15 @@ class JwtTokenUtilTest {
     @DisplayName("토큰 유효성 검사 테스트")
     public void validate_token() {
         //given
-        String targetEmail = "test@gmail.com";
-        String password = "password";
-        UserDetails userDetails = new User(targetEmail, password, Collections.emptyList());
-        UserDetails unAuthorizedUser = new User("unAuthorizedUser@gmail.com", "password", Collections.emptyList());
-        String token = jwtTokenUtil.generateToken(userDetails, JwtTokenType.AUTH);
+        String email = "member1@example.com";
+        UserDetails userDetails = memberService.loadUserByUsername(email);
+
+        String email2 = "member2@example.com";
+        UserDetails unAuthorizedUser = memberService.loadUserByUsername(email2);
+        String token = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.AUTH);
 
         //when
-        boolean isValid = jwtTokenUtil.validateToken(token, unAuthorizedUser);
+        boolean isValid = jwtTokenUtil.validateToken(token, (MemberInfo) unAuthorizedUser);
 
         //then
         assertFalse(isValid);

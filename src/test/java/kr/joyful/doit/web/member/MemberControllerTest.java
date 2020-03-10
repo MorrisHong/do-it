@@ -5,6 +5,9 @@ import kr.joyful.doit.config.RestDocsConfiguration;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRepository;
 import kr.joyful.doit.domain.member.MemberRole;
+import kr.joyful.doit.jwt.JwtTokenType;
+import kr.joyful.doit.jwt.JwtTokenUtil;
+import kr.joyful.doit.service.member.MemberService;
 import kr.joyful.doit.web.member.MemberJoinRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,11 +50,19 @@ class MemberControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    MemberService memberService;
+
     @Test
     @DisplayName("body에 아무것도 없이 회원가입. 400에러 기대")
     void expected_40x_error() throws Exception {
 
-        mockMvc.perform(post("/api/member"))
+        String joinUrl = "/api/member";
+        mockMvc.perform(post(joinUrl)
+                    .servletPath(joinUrl))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -69,7 +80,9 @@ class MemberControllerTest {
         MemberJoinRequestDto memberDto = createMockMemberDto(email, username, password, password2);
 
 
-        mockMvc.perform(post("/api/member")
+        String joinUrl = "/api/member";
+        mockMvc.perform(post(joinUrl)
+                    .servletPath(joinUrl)
                     .content(objectMapper.writeValueAsString(memberDto))
                     .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -102,7 +115,9 @@ class MemberControllerTest {
 
         MemberJoinRequestDto memberDto = createMockMemberDto(email, username, password, password2);
 
-        mockMvc.perform(post("/api/member")
+        String joinUrl = "/api/member";
+        mockMvc.perform(post(joinUrl)
+                    .servletPath(joinUrl)
                     .content(objectMapper.writeValueAsString(memberDto))
                     .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -119,9 +134,13 @@ class MemberControllerTest {
 
         Member member = new Member(email, username, password, role);
         Member saveMember = memberRepository.save(member);
+        String token = jwtTokenUtil.generateToken((MemberInfo) memberService.loadUserByUsername(member.getEmail()), JwtTokenType.AUTH);
 
         //when, then
-        mockMvc.perform(get("/api/member/{memberId}", saveMember.getId())
+        String joinUrl = "/api/member";
+
+        mockMvc.perform(get(joinUrl + "/{memberId}", saveMember.getId())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -141,7 +160,9 @@ class MemberControllerTest {
         MemberJoinRequestDto mockMemberDto = createMockMemberDto(email, username, password, password2);
 
         //when, then
-        mockMvc.perform(post("/api/member")
+        String joinUrl = "/api/member";
+        mockMvc.perform(post(joinUrl)
+                    .servletPath(joinUrl)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(mockMemberDto)))
                 .andDo(print())
