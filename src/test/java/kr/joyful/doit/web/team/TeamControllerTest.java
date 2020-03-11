@@ -1,6 +1,7 @@
 package kr.joyful.doit.web.team;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.joyful.doit.config.RestDocsConfiguration;
 import kr.joyful.doit.domain.team.TeamRepository;
 import kr.joyful.doit.jwt.JwtTokenType;
 import kr.joyful.doit.jwt.JwtTokenUtil;
@@ -8,8 +9,10 @@ import kr.joyful.doit.web.member.MemberInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,12 +22,20 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 @ActiveProfiles("test")
 @Transactional
 class TeamControllerTest {
@@ -45,15 +56,33 @@ class TeamControllerTest {
     @DisplayName("팀만들기 성공")
     @WithUserDetails(userDetailsServiceBeanName = "memberService", value = "member1@example.com")
     void success_create_team() throws Exception {
-        TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
+        //given
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
         String token = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.AUTH);
+
+
+        //when && then
+        TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 
         mockMvc.perform(post("/api/team")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isCreated());
+                .andDo(print())
+                .andExpect(status().isCreated())
+
+                .andDo(document(
+                        "create-team",
+                        requestFields(
+                                fieldWithPath("teamName").description("만들 팀의 이름"),
+                                fieldWithPath("description").description("팀에 대한 설명")
+                        ),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header"),
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증토큰")
+                        ))
+                );
+
     }
 
     @Test

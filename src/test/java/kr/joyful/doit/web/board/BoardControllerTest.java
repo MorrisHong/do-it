@@ -64,10 +64,10 @@ class BoardControllerTest {
 
         String boardUrl = "/api/board";
         mockMvc.perform(post(boardUrl)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .with(user(userDetail))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(boardRequestDto)))
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .with(user(userDetail))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(boardRequestDto)))
                 .andExpect(status().isCreated());
 
         mockMvc.perform(get(boardUrl+ "/{boardId}", 1L)
