@@ -45,7 +45,7 @@ public class JwtTokenUtil {
         return expiration.before(new Date());
     }
 
-    public String generateToken(MemberInfo memberInfo, JwtTokenType tokenType) {
+    private String generateToken(MemberInfo memberInfo, JwtTokenType tokenType) {
         Map<String, Object> claims = new HashMap<>();
         return doGenerateToken(claims, memberInfo.getEmail(), tokenType);
     }
@@ -63,11 +63,6 @@ public class JwtTokenUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + tokenType.getExpiration() * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
-    }
-
-    public Boolean validateToken(String token, MemberInfo memberInfo) {
-        final String username = getUsernameFromToken(token);
-        return (username.equals(memberInfo.getEmail())) && !isTokenExpired(token);
     }
 
     public Boolean validateAuthentication(JwtAuthenticationDto auth, MemberInfo memberInfo) {

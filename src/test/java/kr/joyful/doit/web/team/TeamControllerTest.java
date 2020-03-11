@@ -5,6 +5,7 @@ import kr.joyful.doit.config.RestDocsConfiguration;
 import kr.joyful.doit.domain.team.TeamRepository;
 import kr.joyful.doit.jwt.JwtTokenType;
 import kr.joyful.doit.jwt.JwtTokenUtil;
+import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.web.member.MemberInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,14 +59,14 @@ class TeamControllerTest {
     void success_create_team() throws Exception {
         //given
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
-        String token = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.AUTH);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
 
 
         //when && then
         TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 
         mockMvc.perform(post("/api/team")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andDo(print())
@@ -91,11 +92,11 @@ class TeamControllerTest {
     void failed_duplicate_team_name() throws Exception {
         //given
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
-        String token = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.AUTH);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
         TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 
         mockMvc.perform(post("/api/team")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
                 .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
@@ -105,7 +106,7 @@ class TeamControllerTest {
         TeamCreateRequestDto dto2 = new TeamCreateRequestDto("test team A", "this is another teamA");
 
         mockMvc.perform(post("/api/team")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
                 .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto2)))
@@ -118,16 +119,16 @@ class TeamControllerTest {
     void different_member_duplicate_team_name() throws Exception {
         //given
         UserDetails userDetails1 = memberService.loadUserByUsername("member1@example.com");
-        String token1 = jwtTokenUtil.generateToken((MemberInfo) userDetails1, JwtTokenType.AUTH);
+        JwtAuthenticationDto jwtAuthenticationDto1 = jwtTokenUtil.generateToken((MemberInfo) userDetails1);
 
 
         UserDetails userDetails2 = memberService.loadUserByUsername("member2@example.com");
-        String token2 = jwtTokenUtil.generateToken((MemberInfo) userDetails2, JwtTokenType.AUTH);
+        JwtAuthenticationDto jwtAuthenticationDto2 = jwtTokenUtil.generateToken((MemberInfo) userDetails2);
 
         TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 
         mockMvc.perform(post("/api/team")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token1)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto1.createAuthenticationHeaderString())
                 .with(user(userDetails1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
@@ -137,7 +138,7 @@ class TeamControllerTest {
         TeamCreateRequestDto dto2 = new TeamCreateRequestDto("test team A", "this is another teamA");
 
         mockMvc.perform(post("/api/team")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token2)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto2.createAuthenticationHeaderString())
                 .with(user(userDetails2))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto2)))

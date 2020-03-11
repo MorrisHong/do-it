@@ -8,6 +8,7 @@ import kr.joyful.doit.domain.team.Team;
 import kr.joyful.doit.domain.team.TeamRepository;
 import kr.joyful.doit.jwt.JwtTokenType;
 import kr.joyful.doit.jwt.JwtTokenUtil;
+import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.service.member.MemberService;
 import kr.joyful.doit.web.member.MemberInfo;
 import org.junit.jupiter.api.Test;
@@ -69,11 +70,11 @@ class BoardControllerTest {
                 .teamId(saveTeam.getId()).build();
 
         UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
-        String token = jwtTokenUtil.generateToken((MemberInfo) userDetail, JwtTokenType.AUTH);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetail);
 
         String boardUrl = "/api/board";
         mockMvc.perform(post(boardUrl)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
                 .with(user(userDetail))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(boardRequestDto)))
@@ -108,11 +109,11 @@ class BoardControllerTest {
                 .teamId(saveTeam.getId()).build();
 
         UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
-        String token = jwtTokenUtil.generateToken((MemberInfo) userDetail, JwtTokenType.AUTH);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetail);
 
         String boardUrl = "/api/board";
         mockMvc.perform(post(boardUrl)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
                     .with(user(userDetail))
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(boardRequestDto)))
@@ -128,7 +129,7 @@ class BoardControllerTest {
         Long inviteMemberId = memberService.join(willInviteMember);
 
         mockMvc.perform(RestDocumentationRequestBuilders.put(boardUrl + "/{boardId}/member/{memberId}", 1L, inviteMemberId)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
                 .with(user(userDetail))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -154,13 +155,13 @@ class BoardControllerTest {
 
         //given
         UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
-        String token = jwtTokenUtil.generateToken((MemberInfo) userDetail, JwtTokenType.AUTH);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetail);
 
         String boardUrl = "/api/board";
 
         //then
         mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
                 .with(user(userDetail))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -188,12 +189,12 @@ class BoardControllerTest {
 
         //given
         UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
-        String token = jwtTokenUtil.generateToken((MemberInfo) userDetail, JwtTokenType.AUTH);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetail);
 
         String boardUrl = "/api/board";
 
         mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl+"/{boardId}", 1L)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
                     .with(user(userDetail))
                     .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

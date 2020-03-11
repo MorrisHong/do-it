@@ -5,6 +5,7 @@ import kr.joyful.doit.config.RestDocsConfiguration;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.jwt.JwtTokenType;
 import kr.joyful.doit.jwt.JwtTokenUtil;
+import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.web.member.MemberInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ class CardListControllerTest {
     void create() throws Exception {
 
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
-        String token = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.AUTH);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
         CardListAddRequestDto cardListDto = CardListAddRequestDto.builder()
                 .boardId(1L)
                 .name("to do")
@@ -62,7 +63,7 @@ class CardListControllerTest {
                 .build();
 
         mockMvc.perform(post("/api/card-list")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
                     .with(user(userDetails))
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(cardListDto)))

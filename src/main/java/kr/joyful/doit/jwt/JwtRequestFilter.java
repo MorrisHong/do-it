@@ -36,10 +36,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        JwtAuthenticationDto authentication = JwtAuthenticationDto.createAuthenticationFromAuthHeader(
-                                                                                request.getHeader(HttpHeaders.AUTHORIZATION)
-                                                                                        .replace(TOKEN_PREFIX, ""));
 
+        JwtAuthenticationDto authentication = extractTokenFromHeader(request.getHeader(HttpHeaders.AUTHORIZATION));
         String username = extractUsernameFromToken(authentication.getAccessToken());
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
@@ -72,13 +70,22 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         return username;
     }
 
-    private String extractTokenFromHeader(String requestTokenHeader) {
-        String jwtToken = null;
-        if (requestTokenHeader != null) {
-            jwtToken = requestTokenHeader.substring(7);
+    private JwtAuthenticationDto extractTokenFromHeader(String requestTokenHeader) {
+        JwtAuthenticationDto jwtAuthenticationDto;
+        if (requestTokenHeader != null && requestTokenHeader.startsWith(TOKEN_PREFIX)) {
+            String jwtToken = requestTokenHeader.substring(7);
+            jwtAuthenticationDto = extractToken(jwtToken);
         } else {
-            logger.warn("JWT Token does not begin with Bearer String");
+            throw new BadCredentialsException("Invalid Token");
         }
-        return jwtToken;
+        return jwtAuthenticationDto;
+    }
+
+    private JwtAuthenticationDto extractToken(String jwtToken) {
+        try {
+            return JwtAuthenticationDto.createAuthenticationFromAuthHeader(jwtToken);
+        }catch (Exception e) {
+            throw new BadCredentialsException("Invalid Token");
+        }
     }
 }

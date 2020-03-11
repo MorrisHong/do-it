@@ -1,7 +1,9 @@
 package kr.joyful.doit.jwt;
 
+import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.service.member.MemberService;
 import kr.joyful.doit.web.member.MemberInfo;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +33,11 @@ class JwtTokenUtilTest {
         UserDetails userDetails = memberService.loadUserByUsername(email);
 
         //when
-        String token = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.AUTH);
-        String extractEmail = jwtTokenUtil.getUsernameFromToken(token);
-        Date expiration = jwtTokenUtil.getExpirationDateFromToken(token);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
+        String extractEmail = jwtTokenUtil.getUsernameFromToken(jwtAuthenticationDto.getAccessToken());
+        Date expiration = jwtTokenUtil.getExpirationDateFromToken(jwtAuthenticationDto.getAccessToken());
 
         //then
-        assertNotNull(token);
         assertEquals(email, extractEmail);
         assertTrue(expiration.after(new Date(System.currentTimeMillis()))
                 && expiration.before(new Date(System.currentTimeMillis() + 1 * 60 * 60 * 1000)));
@@ -50,12 +51,11 @@ class JwtTokenUtilTest {
         UserDetails userDetails = memberService.loadUserByUsername(email);
 
         //when
-        String token = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.REFRESH);
-        String extractEmail = jwtTokenUtil.getUsernameFromToken(token);
-        Date expiration = jwtTokenUtil.getExpirationDateFromToken(token);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
+        String extractEmail = jwtTokenUtil.getUsernameFromToken(jwtAuthenticationDto.getRefreshToken());
+        Date expiration = jwtTokenUtil.getExpirationDateFromToken(jwtAuthenticationDto.getRefreshToken());
 
         //then
-        assertNotNull(token);
         assertEquals(email, extractEmail);
         assertTrue(expiration.after(new Date(System.currentTimeMillis()))
                 && expiration.before(new Date(System.currentTimeMillis() + 3 * 60 * 60 * 1000)));
@@ -71,10 +71,10 @@ class JwtTokenUtilTest {
 
         String email2 = "member2@example.com";
         UserDetails unAuthorizedUser = memberService.loadUserByUsername(email2);
-        String token = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.AUTH);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
 
         //when
-        boolean isValid = jwtTokenUtil.validateToken(token, (MemberInfo) unAuthorizedUser);
+        boolean isValid = jwtTokenUtil.validateAuthentication(jwtAuthenticationDto, (MemberInfo) unAuthorizedUser);
 
         //then
         assertFalse(isValid);

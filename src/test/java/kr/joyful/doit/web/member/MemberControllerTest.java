@@ -7,6 +7,7 @@ import kr.joyful.doit.domain.member.MemberRepository;
 import kr.joyful.doit.domain.member.MemberRole;
 import kr.joyful.doit.jwt.JwtTokenType;
 import kr.joyful.doit.jwt.JwtTokenUtil;
+import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.service.member.MemberService;
 import kr.joyful.doit.web.member.MemberJoinRequestDto;
 import org.junit.jupiter.api.DisplayName;
@@ -133,13 +134,13 @@ class MemberControllerTest {
 
         Member member = new Member(email, username, password, role);
         Member saveMember = memberRepository.save(member);
-        String token = jwtTokenUtil.generateToken((MemberInfo) memberService.loadUserByUsername(member.getEmail()), JwtTokenType.AUTH);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) memberService.loadUserByUsername(member.getEmail()));
 
         //when, then
         String joinUrl = "/api/member";
 
         mockMvc.perform(get(joinUrl + "/{memberId}", saveMember.getId())
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
                     .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
