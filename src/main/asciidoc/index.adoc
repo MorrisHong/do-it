@@ -27,3 +27,12 @@ operation::find-member[snippets='curl-request,http-request,http-response']
 
 ---
 
+[[Team]]
+== 팀
+
+[[create-team]]
+=== 팀만들기
+`POST`요청으로 팀을 만들 수 있다
+
+operation::create-team[snippets='request-fields,curl-request,http-request,request-headers,http-response']
+
