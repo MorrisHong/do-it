@@ -10,9 +10,20 @@
 
 [[Member]]
 == 회원
-[[Member-create]]
-=== 회원가입
 
+[[create-member]]
+=== 회원가입
 `POST`요청을 이용해 회원가입을 할 수 있다.
 
 operation::create-member[snippets='request-fields,curl-request,http-request,request-headers,http-response,response-headers']
+
+---
+
+[[find-member]]
+=== 회원조회
+`GET`요청을 이용해 가입한 회원을 조회할 수 있다
+
+operation::find-member[snippets='curl-request,http-request,http-response']
+
+---
+

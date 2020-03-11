@@ -25,8 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -145,7 +144,15 @@ class MemberControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("email").value(email))
-                .andExpect(jsonPath("username").value(username));
+                .andExpect(jsonPath("username").value(username))
+
+                .andDo(document(
+                        "find-member",
+                        responseFields(
+                                fieldWithPath("email").description("사용자의 이메일주소"),
+                                fieldWithPath("username").description("사용자가 사이트 내에서 사용할 이름")
+                        )
+                ));
     }
 
     @Test
