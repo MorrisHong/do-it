@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import kr.joyful.doit.web.member.MemberInfo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -14,7 +15,11 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil {
 
-    private static final String secret = "jwtpassword";
+    private final String secret;
+
+    public JwtTokenUtil(@Value("${DOIT_JWT_SIGNATURE}") String secret) {
+        this.secret = secret;
+    }
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);

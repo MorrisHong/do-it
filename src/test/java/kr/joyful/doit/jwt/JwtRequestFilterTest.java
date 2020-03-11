@@ -43,6 +43,9 @@ class JwtRequestFilterTest {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private JwtTokenUtil realJwtTokenUtil;
+
     @Test
     @DisplayName("유효한 jwt token 검사 후 filter 정상적인 chaining")
     public void valid_token_access_expect_ok() throws ServletException, IOException {
@@ -51,7 +54,6 @@ class JwtRequestFilterTest {
         String email = "member1@example.com";
         UserDetails userDetails = memberService.loadUserByUsername(email);
 
-        JwtTokenUtil realJwtTokenUtil = new JwtTokenUtil();
         String token = realJwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.AUTH);
 
         MockHttpServletRequest request = new MockHttpServletRequest();
