@@ -4,6 +4,7 @@ import kr.joyful.doit.domain.board.Board;
 import kr.joyful.doit.domain.cardList.CardList;
 import kr.joyful.doit.domain.common.BaseEntity;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@EqualsAndHashCode(of = {"id"}, callSuper = false)
 public class Card extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
