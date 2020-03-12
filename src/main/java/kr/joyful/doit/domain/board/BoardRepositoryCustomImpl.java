@@ -4,10 +4,13 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.jsonwebtoken.lang.Strings;
+import kr.joyful.doit.domain.boardMember.QBoardMember;
+import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.team.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -25,6 +28,22 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         teamEq(team)
                 )
                 .fetchOne());
+    }
+
+    @Override
+    public Optional<List<Board>> findMyBoardList(Member member) {
+        //todo
+        return Optional.ofNullable(queryFactory
+                .select(QBoardMember.boardMember.board)
+                .from(QBoardMember.boardMember)
+                .where(
+                        boardMemberEq(member)
+                )
+                .fetch());
+    }
+
+    private BooleanExpression boardMemberEq(Member member) {
+        return member == null ? null : QBoardMember.boardMember.member.eq(member);
     }
 
     private BooleanExpression teamEq(Team team) {
