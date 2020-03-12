@@ -1,5 +1,6 @@
 package kr.joyful.doit;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.joyful.doit.config.SpringSecurityAuditorAware;
 import kr.joyful.doit.web.member.MemberInfo;
 import org.springframework.boot.SpringApplication;
@@ -10,6 +11,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.persistence.EntityManager;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -27,6 +30,11 @@ public class DoItApplication {
     @Bean
     public AuditorAware<String> auditorProvider() {
         return new SpringSecurityAuditorAware();
+    }
+
+    @Bean
+    public JPAQueryFactory queryFactory(EntityManager em) {
+        return new JPAQueryFactory(em);
     }
 
 
