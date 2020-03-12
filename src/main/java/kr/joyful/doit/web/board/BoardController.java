@@ -10,6 +10,7 @@ import kr.joyful.doit.service.team.TeamService;
 import kr.joyful.doit.web.member.CurrentUser;
 import kr.joyful.doit.web.member.MemberInfo;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,12 @@ public class BoardController {
         List<BoardMember> boardMemberList = boardService.findBoardMemberByBoardId(boardId);
         BoardResponseDto board = new BoardResponseDto(boardMemberList);
         return ResponseEntity.ok(board);
+    }
+
+    //todo : dto로 완성시키기.
+    @GetMapping("/api/board")
+    public ResponseEntity<?> findMyBoardList(@CurrentUser MemberInfo memberInfo) {
+        return ResponseEntity.ok(boardService.findMyBoardList(memberInfo.getMember()));
     }
 
     @PutMapping("/api/board/{boardId}/member/{memberId}")
