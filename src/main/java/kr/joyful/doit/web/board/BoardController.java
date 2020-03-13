@@ -1,7 +1,6 @@
 package kr.joyful.doit.web.board;
 
 import kr.joyful.doit.domain.board.Board;
-import kr.joyful.doit.domain.boardMember.BoardMember;
 import kr.joyful.doit.domain.card.Card;
 import kr.joyful.doit.domain.cardList.CardList;
 import kr.joyful.doit.domain.member.Member;
@@ -13,19 +12,13 @@ import kr.joyful.doit.service.member.MemberService;
 import kr.joyful.doit.service.team.TeamService;
 import kr.joyful.doit.web.member.CurrentUser;
 import kr.joyful.doit.web.member.MemberInfo;
-import kr.joyful.doit.web.result.Result;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -59,7 +52,7 @@ public class BoardController {
     @GetMapping("/api/board")
     public ResponseEntity<?> findMyBoardList(@CurrentUser MemberInfo memberInfo) {
         List<Board> boards = boardService.findMyBoardList(memberInfo.getMember());
-        return MyBoard.build(boards);
+        return MyBoardResult.build(boards);
     }
 
     @PutMapping("/api/board/{boardId}/member/{memberId}")
