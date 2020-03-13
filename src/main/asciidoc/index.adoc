@@ -46,3 +46,10 @@ operation::create-team[snippets='request-fields,curl-request,http-request,reques
 
 operation::create-board[snippets='request-fields,curl-request,http-request,request-headers,http-response']
 
+---
+
+[[invite-member]]
+=== 보드에 멤버초대하기
+`PUT`요청으로 보드에 멤버를 초대할 수 있다.
+
+operation::invite-member[snippets='curl-request,http-request,path-parameters,request-headers,http-response']
