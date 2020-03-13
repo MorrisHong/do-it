@@ -123,7 +123,22 @@ class BoardControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void findMyBoardList() throws Exception {
 
+        //given
+        UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
+        String token = jwtTokenUtil.generateToken((MemberInfo) userDetail, JwtTokenType.AUTH);
 
+        String boardUrl = "/api/board";
+
+        //then
+        mockMvc.perform(get(boardUrl)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .with(user(userDetail))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
 }
