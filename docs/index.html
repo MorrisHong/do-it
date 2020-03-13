@@ -482,6 +482,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#create-board_http_response">Example response</a></li>
 </ul>
 </li>
+<li><a href="#invite-member">보드에 멤버초대하기</a>
+<ul class="sectlevel3">
+<li><a href="#invite-member_curl_request">Example request</a></li>
+<li><a href="#invite-member_http_request">HTTP request</a></li>
+<li><a href="#invite-member_path_parameters">Path parameters</a></li>
+<li><a href="#invite-member_request_headers">Request headers</a></li>
+<li><a href="#invite-member_http_response">Example response</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -640,7 +649,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/member/3' -i -X GET \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2NrQGVtYWlsLmNvbSIsImV4cCI6MTU4NDEzMzUxMywiaWF0IjoxNTg0MTI5OTEzfQ.PmKTqGrmOYSnB9IiXQgXVaLKNZSWiK9xpYlZ1jV_AeNT84SJ8MeOsOKIoGJsQceY7hLMy4IBJBRJ19kJ5ap17g' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2NrQGVtYWlsLmNvbSIsImV4cCI6MTU4NDE0MzYyNSwiaWF0IjoxNTg0MTQwMDI1fQ.2_xEQ8ECjiNeKWUvWm2ozqQadEeZBVfhInYuYQXfhIjXBE70MMAjGToG7hP5e3IkXyd2pfZSTjS7DwB8GIjhrQ' \
     -H 'Accept: application/json'</code></pre>
 </div>
 </div>
@@ -650,7 +659,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/member/3 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2NrQGVtYWlsLmNvbSIsImV4cCI6MTU4NDEzMzUxMywiaWF0IjoxNTg0MTI5OTEzfQ.PmKTqGrmOYSnB9IiXQgXVaLKNZSWiK9xpYlZ1jV_AeNT84SJ8MeOsOKIoGJsQceY7hLMy4IBJBRJ19kJ5ap17g
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2NrQGVtYWlsLmNvbSIsImV4cCI6MTU4NDE0MzYyNSwiaWF0IjoxNTg0MTQwMDI1fQ.2_xEQ8ECjiNeKWUvWm2ozqQadEeZBVfhInYuYQXfhIjXBE70MMAjGToG7hP5e3IkXyd2pfZSTjS7DwB8GIjhrQ
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -727,7 +736,7 @@ Content-Length: 61
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/team' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0MTMzNTEzLCJpYXQiOjE1ODQxMjk5MTN9.WK-QXZuD0TyNSLto-ZW_73Tr-DEVlBay918sujn5Iw7gcdL5hzp5WCvv-BjDR2-icEcyrvrtIx_rvbGIaNefbQ' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0MTQzNjI1LCJpYXQiOjE1ODQxNDAwMjV9.iLIQNt9Vh_E41yLkpPWIS-MCtmNdfd18e3hudYrQQpMgTsFls4TlSbq3FeR1GPyS6PHaCqliwr5wr-lpALh6hw' \
     -d '{
   "teamName" : "test team A",
   "description" : "this is teamA"
@@ -741,7 +750,7 @@ Content-Length: 61
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/team HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0MTMzNTEzLCJpYXQiOjE1ODQxMjk5MTN9.WK-QXZuD0TyNSLto-ZW_73Tr-DEVlBay918sujn5Iw7gcdL5hzp5WCvv-BjDR2-icEcyrvrtIx_rvbGIaNefbQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0MTQzNjI1LCJpYXQiOjE1ODQxNDAwMjV9.iLIQNt9Vh_E41yLkpPWIS-MCtmNdfd18e3hudYrQQpMgTsFls4TlSbq3FeR1GPyS6PHaCqliwr5wr-lpALh6hw
 Content-Length: 67
 Host: localhost:8080
 
@@ -847,7 +856,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/board' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0MTMzNTExLCJpYXQiOjE1ODQxMjk5MTF9.QB1qpa8PzK9wUXwWqFBtsUPh268HGm9XN4iPjTMmKuncb-1jv5mo7RVsgXwavwMOXlOeMeJdofGuKzvlhlYuLw' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0MTQzNjI0LCJpYXQiOjE1ODQxNDAwMjR9.dE3mgUOtjUZVvlIhpaDrUMnOL8w1Tm_Aq6PPBwBXGD5A7LOSY8QYA4YjF-Bs0ndIltyxJCJ2syxa2qWl6L7GDg' \
     -d '{
   "title" : "spring study",
   "description" : "스프링 스터디 모임",
@@ -862,7 +871,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/board HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0MTMzNTExLCJpYXQiOjE1ODQxMjk5MTF9.QB1qpa8PzK9wUXwWqFBtsUPh268HGm9XN4iPjTMmKuncb-1jv5mo7RVsgXwavwMOXlOeMeJdofGuKzvlhlYuLw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0MTQzNjI0LCJpYXQiOjE1ODQxNDAwMjR9.dE3mgUOtjUZVvlIhpaDrUMnOL8w1Tm_Aq6PPBwBXGD5A7LOSY8QYA4YjF-Bs0ndIltyxJCJ2syxa2qWl6L7GDg
 Content-Length: 94
 Host: localhost:8080
 
@@ -917,13 +926,109 @@ X-Frame-Options: DENY</code></pre>
 </div>
 </div>
 </div>
+<hr>
+</div>
+<div class="sect2">
+<h3 id="invite-member"><a class="link" href="#invite-member">보드에 멤버초대하기</a></h3>
+<div class="paragraph">
+<p>`PUT`요청으로 보드에 멤버를 초대할 수 있다.</p>
+</div>
+<div class="sect3">
+<h4 id="invite-member_curl_request"><a class="link" href="#invite-member_curl_request">Example request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/board/1/member/3' -i -X PUT \
+    -H 'Content-Type: application/json;charset=UTF-8' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0MTQzNjIzLCJpYXQiOjE1ODQxNDAwMjN9.AvBvW7P8KycqWggmkfSIw4hoXmFb7EzWzDPpFGJk2L2Qbw4Ywcm1xmYXTbiEIy8udPyJfKRsJhr0eJxnongZGA'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="invite-member_http_request"><a class="link" href="#invite-member_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/board/1/member/3 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0MTQzNjIzLCJpYXQiOjE1ODQxNDAwMjN9.AvBvW7P8KycqWggmkfSIw4hoXmFb7EzWzDPpFGJk2L2Qbw4Ywcm1xmYXTbiEIy8udPyJfKRsJhr0eJxnongZGA
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="invite-member_path_parameters"><a class="link" href="#invite-member_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/board/{boardId}/member/{memberId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boardId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">보드의 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">초대하려는 멤버의 아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="invite-member_request_headers"><a class="link" href="#invite-member_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증 토큰</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Content-Type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Content-Type header</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="invite-member_http_response"><a class="link" href="#invite-member_http_response">Example response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-14 05:04:41 +0900
+Last updated 2020-03-14 07:52:34 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
