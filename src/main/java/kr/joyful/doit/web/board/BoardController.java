@@ -13,6 +13,7 @@ import kr.joyful.doit.service.member.MemberService;
 import kr.joyful.doit.service.team.TeamService;
 import kr.joyful.doit.web.member.CurrentUser;
 import kr.joyful.doit.web.member.MemberInfo;
+import kr.joyful.doit.web.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
@@ -58,8 +59,7 @@ public class BoardController {
     @GetMapping("/api/board")
     public ResponseEntity<?> findMyBoardList(@CurrentUser MemberInfo memberInfo) {
         List<Board> boards = boardService.findMyBoardList(memberInfo.getMember());
-        List<MyBoard> collect = boards.stream().map(MyBoard::new).collect(Collectors.toList());
-        return ResponseEntity.ok(collect);
+        return MyBoard.build(boards);
     }
 
     @PutMapping("/api/board/{boardId}/member/{memberId}")
