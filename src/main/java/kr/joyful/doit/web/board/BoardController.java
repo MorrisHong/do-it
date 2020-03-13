@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,7 +34,7 @@ public class BoardController {
     public ResponseEntity<?> create(@RequestBody BoardCreateRequestDto dto, @CurrentUser MemberInfo memberInfo) throws URISyntaxException {
         Team findTeam = teamService.findTeamById(dto.getTeamId());
         Long boardId = boardService.save(dto.toEntity(findTeam), memberInfo.getMember());
-        return ResponseEntity.created(new URI("/api/board/"+boardId)).build();
+        return ResponseEntity.created(new URI("/api/board/" + boardId)).build();
     }
 
     @GetMapping("/api/board/{boardId}")
@@ -43,7 +47,9 @@ public class BoardController {
     //todo : dto로 완성시키기.
     @GetMapping("/api/board")
     public ResponseEntity<?> findMyBoardList(@CurrentUser MemberInfo memberInfo) {
-        return ResponseEntity.ok(boardService.findMyBoardList(memberInfo.getMember()));
+        List<Board> boards = boardService.findMyBoardList(memberInfo.getMember());
+        List<MyBoard> collect = boards.stream().map(MyBoard::new).collect(Collectors.toList());
+        return ResponseEntity.ok(collect);
     }
 
     @PutMapping("/api/board/{boardId}/member/{memberId}")

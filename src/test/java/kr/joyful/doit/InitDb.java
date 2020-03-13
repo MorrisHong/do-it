@@ -44,16 +44,23 @@ public class InitDb implements ApplicationRunner {
                 .build();
         memberService.join(member2);
 
-        Team team = Team.create("teamA", "this is team A", member1, 0);
-        teamService.createTeam(team);
+        Team team1 = Team.create("teamA", "this is team A", member1, 0);
+        teamService.createTeam(team1);
+        Team team2 = Team.create("teamB", "this is team B", member1, 0);
+        teamService.createTeam(team2);
 
-        Board board1 = Board.create(team, "BoardA", "this is board A");
+        Board board1 = Board.create(team1, "BoardA", "this is board A");
         boardService.save(board1, member1);
         boardService.invite(board1, member2);
 
-
-        Board board2 = Board.create(team, "BoardB", "this is board B");
+        Board board2 = Board.create(team1, "BoardB", "this is board B");
         boardService.save(board2, member1);
+
+        Board board3 = Board.create(team2, "BoardC", "this is board C");
+        boardService.save(board3, member1);
+
+        Board board4 = Board.create(team2, "BoardD", "this is board D");
+        boardService.save(board4, member1);
 
         CardList cardList1 = CardList.builder()
                 .board(board1)
