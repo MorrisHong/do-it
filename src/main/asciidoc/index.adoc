@@ -36,3 +36,13 @@ operation::find-member[snippets='curl-request,http-request,http-response']
 
 operation::create-team[snippets='request-fields,curl-request,http-request,request-headers,http-response']
 
+---
+[[Board]]
+== 보드
+
+[[create-board]]
+=== 보드만들기
+`POST`요청으로 팀을 만들 수 있다
+
+operation::create-board[snippets='request-fields,curl-request,http-request,request-headers,http-response']
+

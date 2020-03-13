@@ -1,6 +1,7 @@
 package kr.joyful.doit.web.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.joyful.doit.config.RestDocsConfiguration;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRole;
 import kr.joyful.doit.domain.team.Team;
@@ -11,20 +12,29 @@ import kr.joyful.doit.service.member.MemberService;
 import kr.joyful.doit.web.member.MemberInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class BoardControllerTest {
@@ -61,16 +71,26 @@ class BoardControllerTest {
 
         String boardUrl = "/api/board";
         mockMvc.perform(post(boardUrl)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                    .with(user(userDetail))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(boardRequestDto)))
-                .andExpect(status().isCreated());
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .with(user(userDetail))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(boardRequestDto)))
+                .andExpect(status().isCreated())
 
-        mockMvc.perform(get(boardUrl+ "/{boardId}", 1L)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
-                .andDo(print())
-                .andExpect(status().isOk());
+                .andDo(
+                        document(
+                                "create-board",
+                                requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-type header")
+                                ),
+                                requestFields(
+                                        fieldWithPath("title").description("보드의 이름"),
+                                        fieldWithPath("description").description("보드의 설명"),
+                                        fieldWithPath("teamId").description("보드가 속한 팀의 아이디")
+                                )
+                        )
+                );
     }
 
     @Test
@@ -105,18 +125,18 @@ class BoardControllerTest {
                 .build();
         Long inviteMemberId = memberService.join(willInviteMember);
 
-        mockMvc.perform(put(boardUrl+ "/{boardId}/member/{memberId}", 1L, inviteMemberId)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                    .with(user(userDetail))
-                    .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put(boardUrl + "/{boardId}/member/{memberId}", 1L, inviteMemberId)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .with(user(userDetail))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get(boardUrl+ "/{boardId}", 1L)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                    .with(user(userDetail))
-                    .contentType(MediaType.APPLICATION_JSON))
-                    .andDo(print())
+        mockMvc.perform(get(boardUrl + "/{boardId}", 1L)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .with(user(userDetail))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 

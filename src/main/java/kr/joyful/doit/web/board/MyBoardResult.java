@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
-public class MyBoard {
+public class MyBoardResult {
 
     public static ResponseEntity<ApiResult> build(List<Board> boards) {
         Map<String, List<BoardData>> map = new HashMap<>();
