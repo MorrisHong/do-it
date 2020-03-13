@@ -1,7 +1,6 @@
 package kr.joyful.doit.web.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.joyful.doit.domain.board.Board;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRole;
 import kr.joyful.doit.domain.team.Team;
@@ -17,11 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

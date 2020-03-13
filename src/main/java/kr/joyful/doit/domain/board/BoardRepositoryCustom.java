@@ -11,4 +11,6 @@ public interface BoardRepositoryCustom {
     Optional<Board> findBoardByTitleAndTeam(String title, Team team);
 
     Optional<List<Board>> findMyBoardList(Member member);
+
+    List<Member> findBoardMembersByBoardId(Long boardId);
 }
