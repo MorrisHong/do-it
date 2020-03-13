@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +28,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -125,19 +128,26 @@ class BoardControllerTest {
                 .build();
         Long inviteMemberId = memberService.join(willInviteMember);
 
-        mockMvc.perform(put(boardUrl + "/{boardId}/member/{memberId}", 1L, inviteMemberId)
+        mockMvc.perform(RestDocumentationRequestBuilders.put(boardUrl + "/{boardId}/member/{memberId}", 1L, inviteMemberId)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .with(user(userDetail))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
 
-        mockMvc.perform(get(boardUrl + "/{boardId}", 1L)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .with(user(userDetail))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk());
+                .andDo(
+                        document(
+                                "invite-member",
+                                requestHeaders(
+                                        headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
+                                ),
+                                pathParameters(
+                                        parameterWithName("boardId").description("보드의 아이디"),
+                                        parameterWithName("memberId").description("초대하려는 멤버의 아이디")
+                                )
+                        )
+                );
     }
 
     @Test
