@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -20,5 +22,9 @@ public class CardListService {
 
     public CardList findById(Long cardListId) {
         return cardListRepository.findById(cardListId).orElseThrow( () -> new CardListNotFoundException(cardListId));
+    }
+
+    public List<CardList> findByBoardId(Long boardId) {
+        return cardListRepository.findByBoardId(boardId);
     }
 }

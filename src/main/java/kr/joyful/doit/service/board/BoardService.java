@@ -49,4 +49,8 @@ public class BoardService {
         BoardMember boardMember = BoardMember.create(board, member);
         boardMemberRepository.save(boardMember);
     }
+
+    public List<Member> findBoardMembersByBoardId(Long boardId) {
+        return boardRepository.findBoardMembersByBoardId(boardId);
+    }
 }

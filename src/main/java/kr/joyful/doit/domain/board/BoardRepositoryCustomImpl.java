@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.jsonwebtoken.lang.Strings;
 import kr.joyful.doit.domain.boardMember.QBoardMember;
 import kr.joyful.doit.domain.member.Member;
+import kr.joyful.doit.domain.member.QMember;
 import kr.joyful.doit.domain.team.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -40,6 +41,21 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                         boardMemberEq(member)
                 )
                 .fetch());
+    }
+
+    @Override
+    public List<Member> findBoardMembersByBoardId(Long boardId) {
+        return queryFactory
+                .select(QBoardMember.boardMember.member)
+                .from(QBoardMember.boardMember)
+                .where(
+                        boardEq(boardId)
+                )
+                .fetch();
+    }
+
+    private BooleanExpression boardEq(Long boardId) {
+        return boardId == null ? null : QBoardMember.boardMember.board.id.eq(boardId);
     }
 
     private BooleanExpression boardMemberEq(Member member) {
