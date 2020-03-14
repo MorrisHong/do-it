@@ -56,6 +56,14 @@ operation::invite-member[snippets='curl-request,http-request,path-parameters,req
 
 ---
 
+[[retrieve-my-board]]
+=== 나의 보드 보기
+`GET`요청으로 나의 보드를 볼 수 있다.
+
+operation::retrieve-my-board[snippets='curl-request,http-request,request-headers,http-response,response-fields']
+
+---
+
 [[CardList]]
 == 카드리스트
 

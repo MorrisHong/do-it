@@ -26,8 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -165,7 +164,23 @@ class BoardControllerTest {
                 .with(user(userDetail))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+
+                .andDo(document(
+                        "retrieve-my-board",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증토큰"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
+                        ),
+                        responseFields(
+                                fieldWithPath("myBoard").description("루트 경로"),
+                                fieldWithPath("myBoard.*").description("보드가 속한 팀의 이름"),
+                                fieldWithPath("myBoard.*[].boardId").description("보드의 아이디"),
+                                fieldWithPath("myBoard.*[].title").description("보드의 이름"),
+                                fieldWithPath("myBoard.*[].description").description("보드의 설명"),
+                                fieldWithPath("myBoard.*[].teamName").description("보드가 속한 팀의 이름")
+                        )
+                ));
     }
 
 }
