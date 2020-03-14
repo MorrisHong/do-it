@@ -53,3 +53,22 @@ operation::create-board[snippets='request-fields,curl-request,http-request,reque
 `PUT`요청으로 보드에 멤버를 초대할 수 있다.
 
 operation::invite-member[snippets='curl-request,http-request,path-parameters,request-headers,http-response']
+
+---
+
+[[retrieve-my-board]]
+=== 나의 보드 보기
+`GET`요청으로 나의 보드를 볼 수 있다.
+
+operation::retrieve-my-board[snippets='curl-request,http-request,request-headers,http-response,response-fields']
+
+---
+
+[[CardList]]
+== 카드리스트
+
+[[create-card-list]]
+=== 카드리스트 만들기
+`POST` 요청으로 카드리스트를 만들 수 있다.
+
+operation::create-card-list[snippets='request-fields,curl-request,http-request,request-headers,http-response']
