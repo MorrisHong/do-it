@@ -42,4 +42,15 @@ public class Card extends BaseEntity {
     public static Card create(String title, String description, CardStatus status, CardList cardList, int position) {
         return new Card(title, description, status, cardList, position);
     }
+
+    public int changeCardPosition(int newCardPosition) {
+        position = newCardPosition;
+        return position;
+    }
+
+    public Long changeCardList(CardList newCardList, int newPosition) {
+        this.cardList = newCardList;
+        changeCardPosition(newPosition);
+        return cardList.getId();
+    }
 }
