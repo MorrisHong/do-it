@@ -1,11 +1,14 @@
 package kr.joyful.doit;
 
 import kr.joyful.doit.domain.board.Board;
+import kr.joyful.doit.domain.card.Card;
+import kr.joyful.doit.domain.card.CardStatus;
 import kr.joyful.doit.domain.cardList.CardList;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRole;
 import kr.joyful.doit.domain.team.Team;
 import kr.joyful.doit.service.board.BoardService;
+import kr.joyful.doit.service.card.CardService;
 import kr.joyful.doit.service.cardList.CardListService;
 import kr.joyful.doit.service.member.MemberService;
 import kr.joyful.doit.service.team.TeamService;
@@ -25,6 +28,7 @@ public class InitDb implements ApplicationRunner {
     private final TeamService teamService;
     private final BoardService boardService;
     private final CardListService cardListService;
+    private final CardService cardService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -69,6 +73,11 @@ public class InitDb implements ApplicationRunner {
                 .build();
 
         cardListService.addCardList(cardList1);
+
+        Card cardA = Card.create("testCardA", "test card A", CardStatus.ACTIVATE, cardList1, 0);
+        Card cardB = Card.create("testCardB", "test card B", CardStatus.ACTIVATE, cardList1, 1);
+        cardService.addCard(cardA);
+        cardService.addCard(cardB);
 
 
     }

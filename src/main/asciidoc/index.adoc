@@ -64,6 +64,14 @@ operation::retrieve-my-board[snippets='curl-request,http-request,request-headers
 
 ---
 
+[[retrieve-detail-board]]
+=== 보드 상세보기
+`GET`요청으로 보드의 상세를 볼 수 있다.
+
+operation::retrieve-detail-board[snippets='curl-request,http-request,path-parameters,request-headers,http-response,response-fields']
+
+---
+
 [[CardList]]
 == 카드리스트
 
