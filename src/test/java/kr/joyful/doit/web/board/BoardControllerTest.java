@@ -159,7 +159,7 @@ class BoardControllerTest {
         String boardUrl = "/api/board";
 
         //then
-        mockMvc.perform(get(boardUrl)
+        mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .with(user(userDetail))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -183,4 +183,52 @@ class BoardControllerTest {
                 ));
     }
 
+    @Test
+    void findBoardById() throws Exception {
+
+        //given
+        UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
+        String token = jwtTokenUtil.generateToken((MemberInfo) userDetail, JwtTokenType.AUTH);
+
+        String boardUrl = "/api/board";
+
+        mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl+"/{boardId}", 1L)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .with(user(userDetail))
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+
+                .andDo(document(
+                        "retrieve-detail-board",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("인증토큰"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type header")
+                        ),
+                        responseFields(
+                                fieldWithPath("cardLists").description("해당 보드의 카드 리스트들"),
+                                fieldWithPath("cardLists[].id").description("카드리스트의 아이디"),
+                                fieldWithPath("cardLists[].name").description("카드리스트의 이름"),
+                                fieldWithPath("cardLists[].position").description("카드리스트의 위치"),
+                                fieldWithPath("cardLists[].cards").description("해당 카드리스트의 카드들"),
+                                fieldWithPath("cardLists[].cards[].id").description("카드의 아이디"),
+                                fieldWithPath("cardLists[].cards[].title").description("카드의 타이틀"),
+                                fieldWithPath("cardLists[].cards[].description").description("카드의 설명"),
+                                fieldWithPath("cardLists[].cards[].position").description("카드의 위치"),
+                                fieldWithPath("members").description("해당 보드의 속한 멤버들"),
+                                fieldWithPath("members[].memberId").description("멤버의 아이디"),
+                                fieldWithPath("members[].username").description("멤버의 닉네임"),
+                                fieldWithPath("team").description("보드가 속한 팀"),
+                                fieldWithPath("team.name").description("보드가 속한 팀의 이름"),
+                                fieldWithPath("board").description("해당 보드"),
+                                fieldWithPath("board.description").description("해당 보드의 설명"),
+                                fieldWithPath("board.title").description("해당 보드의 타이틀"),
+                                fieldWithPath("board.id").description("해당 보드의 아이디")
+                        ),
+                        pathParameters(
+                                parameterWithName("boardId").description("상세보기를 원하는 board의 id")
+                        )
+                ));
+
+    }
 }
