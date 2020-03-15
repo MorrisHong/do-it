@@ -80,3 +80,14 @@ operation::retrieve-detail-board[snippets='curl-request,http-request,path-parame
 `POST` 요청으로 카드리스트를 만들 수 있다.
 
 operation::create-card-list[snippets='request-fields,curl-request,http-request,request-headers,http-response']
+
+---
+
+[[Card]]
+== 카드
+
+[[create-card]]
+=== 카드 만들기
+`POST` 요청으로 카드리스트를 만들 수 있다.
+
+operation::create-card[snippets='request-fields,curl-request,http-request,request-headers,http-response']
