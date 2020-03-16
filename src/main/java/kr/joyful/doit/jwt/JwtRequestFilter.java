@@ -1,9 +1,14 @@
 package kr.joyful.doit.jwt;
 
+import kr.joyful.doit.web.member.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -31,6 +36,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String jwtToken = extractTokenFromHeader(request.getHeader(HttpHeaders.AUTHORIZATION));
         String username = extractUsernameFromToken(jwtToken);
+
+        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+            if(jwtTokenUtil.validateToken(jwtToken, (MemberInfo) userDetails)) {
+                UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(userDetails, null ,userDetails.getAuthorities());
+
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+        }
 
         /**
          * todo 토큰에 대한 확실한 검증 필요

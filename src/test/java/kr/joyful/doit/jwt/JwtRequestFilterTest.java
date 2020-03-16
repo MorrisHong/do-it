@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,8 +23,7 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -42,6 +42,9 @@ class JwtRequestFilterTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private JwtTokenUtil realJwtTokenUtil;
 
     @Test
     @DisplayName("유효한 jwt token 검사 후 filter 정상적인 chaining")
@@ -89,5 +92,33 @@ class JwtRequestFilterTest {
             () -> jwtRequestFilter.doFilterInternal(request,response,filterChain)
         );
         assertTrue(exception.getMessage().contains("Invalid Token"));
+    }
+
+    @Test
+    @DisplayName("유효한 token, valid한 user일 경우 SecurityContextHolder에 UserDetail 저장")
+    public void valid_access_save_security_context_holder() throws ServletException, IOException {
+
+        //given
+        String email = "member1@example.com";
+        UserDetails userDetails = memberService.loadUserByUsername(email);
+        String token = realJwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.AUTH);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        FilterChain filterChain = mock(FilterChain.class);
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+        //when
+        when(jwtTokenUtil.getUsernameFromToken(token)).thenReturn(email);
+        when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
+
+        jwtRequestFilter.doFilterInternal(request,response,filterChain);
+
+        //then
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        System.out.println(principal);
+        System.out.println(userDetails);
+        assertEquals(userDetails, principal);
+
     }
 }
