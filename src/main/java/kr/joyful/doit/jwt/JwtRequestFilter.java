@@ -1,5 +1,6 @@
 package kr.joyful.doit.jwt;
 
+import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.web.member.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
+    private static final String TOKEN_PREFIX = "Bearer ";
     private static final List<String> EXCLUDE_URL =
             Arrays.asList("/api/member" , "/api/authenticate");
 
@@ -34,27 +36,23 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String jwtToken = extractTokenFromHeader(request.getHeader(HttpHeaders.AUTHORIZATION));
-        String username = extractUsernameFromToken(jwtToken);
+        JwtAuthenticationDto authentication = JwtAuthenticationDto.createAuthenticationFromAuthHeader(
+                                                                                request.getHeader(HttpHeaders.AUTHORIZATION)
+                                                                                        .replace(TOKEN_PREFIX, ""));
 
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        String username = extractUsernameFromToken(authentication.getAccessToken());
+
+        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            if(jwtTokenUtil.validateToken(jwtToken, (MemberInfo) userDetails)) {
+            if(jwtTokenUtil.validateAuthentication(authentication, (MemberInfo) userDetails)) {
                 UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, null ,userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(userDetails, null ,userDetails.getAuthorities());
 
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
-
-        /**
-         * todo 토큰에 대한 확실한 검증 필요
-         * 1. access 토큰이 만료되었다면 refresh token의 만료시간까지 체크하고 둘다 만료일 경우 다시 로그인하도록 처리
-         * 2. 토큰에 대한 signature 등에 대한 원본 검증 원본 검증 안될시 BadCredentialsException
-         * 3. 등등 ..
-         */
 
         filterChain.doFilter(request,response);
     }
@@ -76,7 +74,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private String extractTokenFromHeader(String requestTokenHeader) {
         String jwtToken = null;
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+        if (requestTokenHeader != null) {
             jwtToken = requestTokenHeader.substring(7);
         } else {
             logger.warn("JWT Token does not begin with Bearer String");

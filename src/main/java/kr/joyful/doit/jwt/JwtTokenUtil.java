@@ -3,9 +3,11 @@ package kr.joyful.doit.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.web.member.MemberInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -48,6 +50,11 @@ public class JwtTokenUtil {
         return doGenerateToken(claims, memberInfo.getEmail(), tokenType);
     }
 
+    public JwtAuthenticationDto generateToken(MemberInfo memberInfo) {
+        return new JwtAuthenticationDto(generateToken(memberInfo, JwtTokenType.AUTH)
+                , generateToken(memberInfo, JwtTokenType.REFRESH));
+    }
+
     private String doGenerateToken(Map<String, Object> claims, String username, JwtTokenType tokenType) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -61,6 +68,16 @@ public class JwtTokenUtil {
     public Boolean validateToken(String token, MemberInfo memberInfo) {
         final String username = getUsernameFromToken(token);
         return (username.equals(memberInfo.getEmail())) && !isTokenExpired(token);
+    }
+
+    public Boolean validateAuthentication(JwtAuthenticationDto auth, MemberInfo memberInfo) {
+        String accessToken = auth.getAccessToken();
+        String refreshToken = auth.getRefreshToken();
+        if(StringUtils.isEmpty(accessToken) || StringUtils.isEmpty(refreshToken)) return false;
+        if(!getUsernameFromToken(accessToken).equals(refreshToken)) return false;
+        if(!memberInfo.getEmail().equals(accessToken) || !memberInfo.getEmail().equals(refreshToken)) return false;
+        if(isTokenExpired(accessToken) && isTokenExpired(refreshToken)) return false;
+        return true;
     }
 
 }

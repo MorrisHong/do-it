@@ -109,15 +109,16 @@ class JwtRequestFilterTest {
         //when
         when(jwtTokenUtil.getUsernameFromToken(token)).thenReturn(email);
         when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
+        when(jwtTokenUtil.validateToken(token, (MemberInfo) userDetails)).thenReturn(true);
 
         jwtRequestFilter.doFilterInternal(request,response,filterChain);
 
         //then
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        System.out.println(principal);
-        System.out.println(userDetails);
+        assertNotNull(principal);
         assertEquals(userDetails, principal);
 
     }
+
 }
