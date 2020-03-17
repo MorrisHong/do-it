@@ -9,11 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class JwtAuthenticationDtoTest {
 
     @Autowired
@@ -33,16 +35,16 @@ class JwtAuthenticationDtoTest {
 
         String headerString ="";
 
-        String token = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.AUTH);
-        String refreshToken = jwtTokenUtil.generateToken((MemberInfo) userDetails, JwtTokenType.REFRESH);
-        headerString += token + ":" + refreshToken;
+        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
+
+        headerString += jwtAuthenticationDto.createAuthenticationHeaderString();
 
         //when
         JwtAuthenticationDto authentication = JwtAuthenticationDto.createAuthenticationFromAuthHeader(headerString);
 
         //then
-        assertEquals(token, authentication.getAccessToken());
-        assertEquals(refreshToken, authentication.getRefreshToken());
+        assertEquals(jwtAuthenticationDto.getAccessToken(), authentication.getAccessToken());
+        assertEquals(jwtAuthenticationDto.getRefreshToken(), authentication.getRefreshToken());
 
     }
 }
