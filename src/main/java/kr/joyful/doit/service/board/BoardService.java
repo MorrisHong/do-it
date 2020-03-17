@@ -5,10 +5,12 @@ import kr.joyful.doit.domain.board.BoardRepository;
 import kr.joyful.doit.domain.boardMember.BoardMember;
 import kr.joyful.doit.domain.boardMember.BoardMemberRepository;
 import kr.joyful.doit.domain.member.Member;
+import kr.joyful.doit.domain.team.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,10 @@ public class BoardService {
         return boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
     }
 
+    public List<Board> findMyBoardList(Member member) {
+        return boardRepository.findMyBoardList(member).orElse(Collections.emptyList());
+    }
+
     public List<BoardMember> findBoardMemberByBoardId(Long boardId) {
         return boardMemberRepository.findBoardMemberById(boardId);
     }
@@ -42,5 +48,9 @@ public class BoardService {
     public void invite(Board board, Member member) {
         BoardMember boardMember = BoardMember.create(board, member);
         boardMemberRepository.save(boardMember);
+    }
+
+    public List<Member> findBoardMembersByBoardId(Long boardId) {
+        return boardRepository.findBoardMembersByBoardId(boardId);
     }
 }

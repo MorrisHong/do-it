@@ -36,3 +36,58 @@ operation::find-member[snippets='curl-request,http-request,http-response']
 
 operation::create-team[snippets='request-fields,curl-request,http-request,request-headers,http-response']
 
+---
+[[Board]]
+== 보드
+
+[[create-board]]
+=== 보드만들기
+`POST`요청으로 팀을 만들 수 있다
+
+operation::create-board[snippets='request-fields,curl-request,http-request,request-headers,http-response']
+
+---
+
+[[invite-member]]
+=== 보드에 멤버초대하기
+`PUT`요청으로 보드에 멤버를 초대할 수 있다.
+
+operation::invite-member[snippets='curl-request,http-request,path-parameters,request-headers,http-response']
+
+---
+
+[[retrieve-my-board]]
+=== 나의 보드 보기
+`GET`요청으로 나의 보드를 볼 수 있다.
+
+operation::retrieve-my-board[snippets='curl-request,http-request,request-headers,http-response,response-fields']
+
+---
+
+[[retrieve-detail-board]]
+=== 보드 상세보기
+`GET`요청으로 보드의 상세를 볼 수 있다.
+
+operation::retrieve-detail-board[snippets='curl-request,http-request,path-parameters,request-headers,http-response,response-fields']
+
+---
+
+[[CardList]]
+== 카드리스트
+
+[[create-card-list]]
+=== 카드리스트 만들기
+`POST` 요청으로 카드리스트를 만들 수 있다.
+
+operation::create-card-list[snippets='request-fields,curl-request,http-request,request-headers,http-response']
+
+---
+
+[[Card]]
+== 카드
+
+[[create-card]]
+=== 카드 만들기
+`POST` 요청으로 카드리스트를 만들 수 있다.
+
+operation::create-card[snippets='request-fields,curl-request,http-request,request-headers,http-response']

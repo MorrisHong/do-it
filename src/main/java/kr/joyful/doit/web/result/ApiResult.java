@@ -18,4 +18,12 @@ public class ApiResult extends HashMap<String, Object> {
         apiResult.put("message", message);
         return apiResult;
     }
+
+    public ApiResult add(String key, Object value) {
+        Assert.hasText(key, "Parameter `key` must not be blank");
+        Assert.notNull(value, "Parameter `value` must not be null");
+
+        this.put(key, value);
+        return this;
+    }
 }
