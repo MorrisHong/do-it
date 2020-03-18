@@ -37,15 +37,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
 
-        JwtAuthenticationDto authentication = extractTokenFromHeader(request.getHeader(HttpHeaders.AUTHORIZATION));
+        JwtAuthenticationDto authentication = extractAuthenticationFromHeader(request.getHeader(HttpHeaders.AUTHORIZATION));
         String username = extractUsernameFromToken(authentication.getAccessToken());
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            if(jwtTokenUtil.validateAuthentication(authentication, (MemberInfo) userDetails)) {
+            if(jwtTokenUtil.validateAuthentication(authentication)) {
+
+                if(jwtTokenUtil.isTokenExpired(authentication.getAccessToken())
+                    && !jwtTokenUtil.isTokenExpired(authentication.getRefreshToken())) {
+                    authentication = jwtTokenUtil.generateToken((MemberInfo) userDetails);
+                }
+
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null ,userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(userDetails, authentication ,userDetails.getAuthorities());
 
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -70,18 +76,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         return username;
     }
 
-    private JwtAuthenticationDto extractTokenFromHeader(String requestTokenHeader) {
+    private JwtAuthenticationDto extractAuthenticationFromHeader(String requestTokenHeader) {
         JwtAuthenticationDto jwtAuthenticationDto;
         if (requestTokenHeader != null && requestTokenHeader.startsWith(TOKEN_PREFIX)) {
             String jwtToken = requestTokenHeader.substring(7);
-            jwtAuthenticationDto = extractToken(jwtToken);
+            jwtAuthenticationDto = extractAuthentication(jwtToken);
         } else {
             throw new BadCredentialsException("Invalid Token");
         }
         return jwtAuthenticationDto;
     }
 
-    private JwtAuthenticationDto extractToken(String jwtToken) {
+    private JwtAuthenticationDto extractAuthentication(String jwtToken) {
         try {
             return JwtAuthenticationDto.createAuthenticationFromAuthHeader(jwtToken);
         }catch (Exception e) {

@@ -26,6 +26,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -97,22 +98,21 @@ class JwtRequestFilterTest {
 
     @Test
     @DisplayName("유효한 token, valid한 user일 경우 SecurityContextHolder에 UserDetail 저장")
-    @Disabled("재검증 필요")
     public void valid_access_save_security_context_holder() throws ServletException, IOException {
 
         //given
         String email = "member1@example.com";
         UserDetails userDetails = memberService.loadUserByUsername(email);
-        JwtAuthenticationDto jwtAuthenticationDto = realJwtTokenUtil.generateToken((MemberInfo) userDetails);
+        JwtAuthenticationDto authentication = realJwtTokenUtil.generateToken((MemberInfo) userDetails);
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         FilterChain filterChain = mock(FilterChain.class);
-        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString());
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authentication.createAuthenticationHeaderString());
 
         //when
-        when(jwtTokenUtil.getUsernameFromToken(jwtAuthenticationDto.getAccessToken())).thenReturn(email);
+        when(jwtTokenUtil.getUsernameFromToken(authentication.getAccessToken())).thenReturn(email);
         when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
-        when(jwtTokenUtil.validateAuthentication(jwtAuthenticationDto,(MemberInfo) userDetails)).thenReturn(true);
+        when(jwtTokenUtil.validateAuthentication(any(authentication.getClass()))).thenReturn(true);
 
         jwtRequestFilter.doFilterInternal(request,response,filterChain);
 

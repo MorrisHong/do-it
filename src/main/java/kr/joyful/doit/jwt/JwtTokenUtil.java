@@ -40,7 +40,7 @@ public class JwtTokenUtil {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
@@ -65,12 +65,11 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public Boolean validateAuthentication(JwtAuthenticationDto auth, MemberInfo memberInfo) {
+    public Boolean validateAuthentication(JwtAuthenticationDto auth) {
         String accessToken = auth.getAccessToken();
         String refreshToken = auth.getRefreshToken();
         if(StringUtils.isEmpty(accessToken) || StringUtils.isEmpty(refreshToken)) return false;
-        if(!getUsernameFromToken(accessToken).equals(refreshToken)) return false;
-        if(!memberInfo.getEmail().equals(accessToken) || !memberInfo.getEmail().equals(refreshToken)) return false;
+        if(!getUsernameFromToken(accessToken).equals(getUsernameFromToken(refreshToken))) return false;
         if(isTokenExpired(accessToken) && isTokenExpired(refreshToken)) return false;
         return true;
     }
