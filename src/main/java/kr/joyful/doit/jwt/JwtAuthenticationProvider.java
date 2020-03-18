@@ -19,11 +19,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         User user = (User) authentication.getPrincipal();
-        String password = authentication.getCredentials().toString();
-        if(!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadCredentialsException("Authentication failed");
-        }
-        return new UsernamePasswordAuthenticationToken(user.getUsername(), password);
+        return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 
     @Override

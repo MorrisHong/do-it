@@ -63,7 +63,7 @@ class JwtTokenUtilTest {
 
 
     @Test
-    @DisplayName("토큰 유효성 검사 테스트")
+    @DisplayName("토큰 유효성 검사 테스트: accessToken과 변조된 refreshToken")
     public void validate_token() {
         //given
         String email = "member1@example.com";
@@ -71,12 +71,16 @@ class JwtTokenUtilTest {
 
         String email2 = "member2@example.com";
         UserDetails unAuthorizedUser = memberService.loadUserByUsername(email2);
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
+        JwtAuthenticationDto validAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
+        JwtAuthenticationDto invalidAuthentication = jwtTokenUtil.generateToken((MemberInfo) unAuthorizedUser);
+
+        JwtAuthenticationDto forgeryAuthentication = JwtAuthenticationDto.createAuthenticationFromAuthHeader(validAuthenticationDto.getAccessToken() + ":" + invalidAuthentication.getRefreshToken());
 
         //when
-        boolean isValid = jwtTokenUtil.validateAuthentication(jwtAuthenticationDto, (MemberInfo) unAuthorizedUser);
+        boolean isValid = jwtTokenUtil.validateAuthentication(forgeryAuthentication);
 
         //then
         assertFalse(isValid);
     }
+
 }
