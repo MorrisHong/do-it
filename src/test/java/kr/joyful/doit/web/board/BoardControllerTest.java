@@ -175,8 +175,8 @@ class BoardControllerTest {
                         ),
                         responseFields(
                                 fieldWithPath("myBoard").description("루트 경로"),
+                                fieldWithPath("myBoard[].teamId").description("팀의 아이디"),
                                 fieldWithPath("myBoard[].teamName").description("팀의 이름"),
-                                fieldWithPath("myBoard[].position").description("팀의 위치"),
                                 fieldWithPath("myBoard[].details[]").description("보드의 상세정보"),
                                 fieldWithPath("myBoard[].details[].boardId").description("보드의 아이디"),
                                 fieldWithPath("myBoard[].details[].title").description("보드의 타이틀"),
