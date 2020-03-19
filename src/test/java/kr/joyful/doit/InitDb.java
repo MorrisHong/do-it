@@ -48,9 +48,9 @@ public class InitDb implements ApplicationRunner {
                 .build();
         memberService.join(member2);
 
-        Team team1 = Team.create("teamA", "this is team A", member1, 0);
+        Team team1 = Team.create("teamB", "this is team B", member1, 1);
         teamService.createTeam(team1);
-        Team team2 = Team.create("teamB", "this is team B", member1, 0);
+        Team team2 = Team.create("teamC", "this is team C", member1, 2);
         teamService.createTeam(team2);
 
         Board board1 = Board.create(team1, "BoardA", "this is board A");
