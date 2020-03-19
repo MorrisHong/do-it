@@ -6,10 +6,8 @@ import kr.joyful.doit.web.result.Result;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -18,12 +16,13 @@ public class MyBoardResult {
 
     public static ResponseEntity<ApiResult> build(List<Board> boards) {
         Map<String, List<Board>> collect = boards.stream().collect(groupingBy(board -> board.getTeam().getName()));
-        Set<String> strings = collect.keySet();
-        List<BoardData> result = new ArrayList<>();
-        for (String string : strings) {
-            List<Board> boards1 = collect.get(string);
-            result.add(new BoardData(boards1));
-        }
+        List<BoardData> result = collect.values().stream().map(BoardData::new).collect(Collectors.toList());
+//        Set<String> strings = collect.keySet();
+//        List<BoardData> result = new ArrayList<>();
+//        for (String string : strings) {
+//            List<Board> boards1 = collect.get(string);
+//            result.add(new BoardData(boards1));
+//        }
         return Result.ok(ApiResult.blank().add("myBoard", result));
     }
 
