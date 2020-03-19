@@ -124,4 +124,30 @@ class JwtRequestFilterTest {
 
     }
 
+
+    @Test
+    @DisplayName("유효한 token, valid한 user일 경우 Response에 token 명시")
+    public void valid_access_response_token() throws ServletException, IOException {
+
+        //given
+        String email = "member1@example.com";
+        UserDetails userDetails = memberService.loadUserByUsername(email);
+        JwtAuthenticationDto authentication = realJwtTokenUtil.generateToken((MemberInfo) userDetails);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        FilterChain filterChain = mock(FilterChain.class);
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authentication.createAuthenticationHeaderString());
+
+        //when
+        when(jwtTokenUtil.getUsernameFromToken(authentication.getAccessToken())).thenReturn(email);
+        when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
+        when(jwtTokenUtil.validateAuthentication(any(authentication.getClass()))).thenReturn(true);
+
+        jwtRequestFilter.doFilterInternal(request,response,filterChain);
+
+        //then
+        assertEquals(authentication.createAuthenticationHeaderString(), response.getHeader(HttpHeaders.AUTHORIZATION));
+
+    }
+
 }

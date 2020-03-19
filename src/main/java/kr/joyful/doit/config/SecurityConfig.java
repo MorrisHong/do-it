@@ -30,7 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/api/member", "/api/authenticate").permitAll()
-                .antMatchers("/api/member/{\\\\d+}", "/api/board/{\\\\d+}").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .csrf().disable()
@@ -43,7 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
 
     }
 
