@@ -694,7 +694,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/member/3' -i -X GET \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2NrQGVtYWlsLmNvbSIsImV4cCI6MTU4NDY0Njg3NSwiaWF0IjoxNTg0NjQzMjc1fQ.6YAavZuwT5vCNCNHotPI4evD77C3-JkMoyhhVDbNnzS10WFEDE8dlVl2eD045iS_PTeik2sDQab1KDH_QBVWjg' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2NrQGVtYWlsLmNvbSIsImV4cCI6MTU4NDY0ODU1NiwiaWF0IjoxNTg0NjQ0OTU2fQ.v209kg0DVCgTd2Lja80kdKKZEX3htX59Ta0pU6Btogj9TsZWQPEaYYYuqETDDUdvH0bTqh8JVeRUxtV4licr_w' \
     -H 'Accept: application/json'</code></pre>
 </div>
 </div>
@@ -704,7 +704,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/member/3 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2NrQGVtYWlsLmNvbSIsImV4cCI6MTU4NDY0Njg3NSwiaWF0IjoxNTg0NjQzMjc1fQ.6YAavZuwT5vCNCNHotPI4evD77C3-JkMoyhhVDbNnzS10WFEDE8dlVl2eD045iS_PTeik2sDQab1KDH_QBVWjg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtb2NrQGVtYWlsLmNvbSIsImV4cCI6MTU4NDY0ODU1NiwiaWF0IjoxNTg0NjQ0OTU2fQ.v209kg0DVCgTd2Lja80kdKKZEX3htX59Ta0pU6Btogj9TsZWQPEaYYYuqETDDUdvH0bTqh8JVeRUxtV4licr_w
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -781,7 +781,7 @@ Content-Length: 61
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/team' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODc1LCJpYXQiOjE1ODQ2NDMyNzV9.xxu69LatTwZkO5A3f5RSmiDFdak55N8g2vJU8L_4cB8kymyVvtPpAz87jR_ZqtrjrmNy7pfeDtv8kyaYbN4mqw' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU2LCJpYXQiOjE1ODQ2NDQ5NTZ9._euTduyeqilF3SV01yQ9YsJhmRbMcLP6LRDGhRLONFd5Wg6u10nAOFFTTa5Yhz_SnHbFCGMeOQF_xeEGTLqt3w' \
     -d '{
   "teamName" : "test team A",
   "description" : "this is teamA"
@@ -795,7 +795,7 @@ Content-Length: 61
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/team HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODc1LCJpYXQiOjE1ODQ2NDMyNzV9.xxu69LatTwZkO5A3f5RSmiDFdak55N8g2vJU8L_4cB8kymyVvtPpAz87jR_ZqtrjrmNy7pfeDtv8kyaYbN4mqw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU2LCJpYXQiOjE1ODQ2NDQ5NTZ9._euTduyeqilF3SV01yQ9YsJhmRbMcLP6LRDGhRLONFd5Wg6u10nAOFFTTa5Yhz_SnHbFCGMeOQF_xeEGTLqt3w
 Content-Length: 67
 Host: localhost:8080
 
@@ -901,7 +901,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/board' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODczLCJpYXQiOjE1ODQ2NDMyNzN9.mRteum3gugaSDsu0u-i3Qv07A87X8CbuuO1ziwgKxPakg9OmyyAw6tK6jH99Eih-Ij0Imy7TNyOAx1JqE4_cag' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU1LCJpYXQiOjE1ODQ2NDQ5NTV9.PhSXsyk-vWZPKqSoyehgodel_YrAxs6WoURNS5qPRH5YV5GVl6gOyanVmoboY8QQhd0qKgXPN9lLdtAQazo-WA' \
     -d '{
   "title" : "spring study",
   "description" : "스프링 스터디 모임",
@@ -916,7 +916,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/board HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODczLCJpYXQiOjE1ODQ2NDMyNzN9.mRteum3gugaSDsu0u-i3Qv07A87X8CbuuO1ziwgKxPakg9OmyyAw6tK6jH99Eih-Ij0Imy7TNyOAx1JqE4_cag
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU1LCJpYXQiOjE1ODQ2NDQ5NTV9.PhSXsyk-vWZPKqSoyehgodel_YrAxs6WoURNS5qPRH5YV5GVl6gOyanVmoboY8QQhd0qKgXPN9lLdtAQazo-WA
 Content-Length: 94
 Host: localhost:8080
 
@@ -984,7 +984,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/board/1/member/3' -i -X PUT \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODczLCJpYXQiOjE1ODQ2NDMyNzN9.mRteum3gugaSDsu0u-i3Qv07A87X8CbuuO1ziwgKxPakg9OmyyAw6tK6jH99Eih-Ij0Imy7TNyOAx1JqE4_cag'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU0LCJpYXQiOjE1ODQ2NDQ5NTR9.0EaJcaJLmf44iC6e4sz20NXjKuIabi6xrFyrxb6oor8pHVDqudyasZS6G1kwBShXIQpo2K8XfKDPVeDWph4LsA'</code></pre>
 </div>
 </div>
 </div>
@@ -994,7 +994,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/board/1/member/3 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODczLCJpYXQiOjE1ODQ2NDMyNzN9.mRteum3gugaSDsu0u-i3Qv07A87X8CbuuO1ziwgKxPakg9OmyyAw6tK6jH99Eih-Ij0Imy7TNyOAx1JqE4_cag
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU0LCJpYXQiOjE1ODQ2NDQ5NTR9.0EaJcaJLmf44iC6e4sz20NXjKuIabi6xrFyrxb6oor8pHVDqudyasZS6G1kwBShXIQpo2K8XfKDPVeDWph4LsA
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1080,7 +1080,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/board' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODczLCJpYXQiOjE1ODQ2NDMyNzN9.mRteum3gugaSDsu0u-i3Qv07A87X8CbuuO1ziwgKxPakg9OmyyAw6tK6jH99Eih-Ij0Imy7TNyOAx1JqE4_cag'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU1LCJpYXQiOjE1ODQ2NDQ5NTV9.PhSXsyk-vWZPKqSoyehgodel_YrAxs6WoURNS5qPRH5YV5GVl6gOyanVmoboY8QQhd0qKgXPN9lLdtAQazo-WA'</code></pre>
 </div>
 </div>
 </div>
@@ -1090,7 +1090,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/board HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODczLCJpYXQiOjE1ODQ2NDMyNzN9.mRteum3gugaSDsu0u-i3Qv07A87X8CbuuO1ziwgKxPakg9OmyyAw6tK6jH99Eih-Ij0Imy7TNyOAx1JqE4_cag
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU1LCJpYXQiOjE1ODQ2NDQ5NTV9.PhSXsyk-vWZPKqSoyehgodel_YrAxs6WoURNS5qPRH5YV5GVl6gOyanVmoboY8QQhd0qKgXPN9lLdtAQazo-WA
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1135,12 +1135,12 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 837
+Content-Length: 831
 
 {
   "myBoard" : [ {
+    "teamId" : 2,
     "teamName" : "teamC",
-    "position" : 2,
     "details" : [ {
       "boardId" : 3,
       "title" : "BoardC",
@@ -1151,8 +1151,8 @@ Content-Length: 837
       "description" : "this is board D"
     } ]
   }, {
+    "teamId" : 4,
     "teamName" : "teamA",
-    "position" : 0,
     "details" : [ {
       "boardId" : 5,
       "title" : "jpa study",
@@ -1163,8 +1163,8 @@ Content-Length: 837
       "description" : "스프링 스터디 모임"
     } ]
   }, {
+    "teamId" : 1,
     "teamName" : "teamB",
-    "position" : 1,
     "details" : [ {
       "boardId" : 1,
       "title" : "BoardA",
@@ -1201,14 +1201,14 @@ Content-Length: 837
 <td class="tableblock halign-left valign-top"><p class="tableblock">루트 경로</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>myBoard[].teamId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">팀의 아이디</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>myBoard[].teamName</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">팀의 이름</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>myBoard[].position</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">팀의 위치</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>myBoard[].details[]</code></p></td>
@@ -1246,7 +1246,7 @@ Content-Length: 837
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/board/1' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODczLCJpYXQiOjE1ODQ2NDMyNzN9.mRteum3gugaSDsu0u-i3Qv07A87X8CbuuO1ziwgKxPakg9OmyyAw6tK6jH99Eih-Ij0Imy7TNyOAx1JqE4_cag'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU0LCJpYXQiOjE1ODQ2NDQ5NTR9.0EaJcaJLmf44iC6e4sz20NXjKuIabi6xrFyrxb6oor8pHVDqudyasZS6G1kwBShXIQpo2K8XfKDPVeDWph4LsA'</code></pre>
 </div>
 </div>
 </div>
@@ -1256,7 +1256,7 @@ Content-Length: 837
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/board/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODczLCJpYXQiOjE1ODQ2NDMyNzN9.mRteum3gugaSDsu0u-i3Qv07A87X8CbuuO1ziwgKxPakg9OmyyAw6tK6jH99Eih-Ij0Imy7TNyOAx1JqE4_cag
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU0LCJpYXQiOjE1ODQ2NDQ5NTR9.0EaJcaJLmf44iC6e4sz20NXjKuIabi6xrFyrxb6oor8pHVDqudyasZS6G1kwBShXIQpo2K8XfKDPVeDWph4LsA
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1530,7 +1530,7 @@ Content-Length: 756
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/card-list' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODc1LCJpYXQiOjE1ODQ2NDMyNzV9.xxu69LatTwZkO5A3f5RSmiDFdak55N8g2vJU8L_4cB8kymyVvtPpAz87jR_ZqtrjrmNy7pfeDtv8kyaYbN4mqw' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU2LCJpYXQiOjE1ODQ2NDQ5NTZ9._euTduyeqilF3SV01yQ9YsJhmRbMcLP6LRDGhRLONFd5Wg6u10nAOFFTTa5Yhz_SnHbFCGMeOQF_xeEGTLqt3w' \
     -d '{
   "name" : "to do",
   "position" : 0,
@@ -1545,7 +1545,7 @@ Content-Length: 756
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/card-list HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODc1LCJpYXQiOjE1ODQ2NDMyNzV9.xxu69LatTwZkO5A3f5RSmiDFdak55N8g2vJU8L_4cB8kymyVvtPpAz87jR_ZqtrjrmNy7pfeDtv8kyaYbN4mqw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU2LCJpYXQiOjE1ODQ2NDQ5NTZ9._euTduyeqilF3SV01yQ9YsJhmRbMcLP6LRDGhRLONFd5Wg6u10nAOFFTTa5Yhz_SnHbFCGMeOQF_xeEGTLqt3w
 Content-Length: 57
 Host: localhost:8080
 
@@ -1657,7 +1657,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/card' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODczLCJpYXQiOjE1ODQ2NDMyNzN9.mRteum3gugaSDsu0u-i3Qv07A87X8CbuuO1ziwgKxPakg9OmyyAw6tK6jH99Eih-Ij0Imy7TNyOAx1JqE4_cag' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU0LCJpYXQiOjE1ODQ2NDQ5NTR9.0EaJcaJLmf44iC6e4sz20NXjKuIabi6xrFyrxb6oor8pHVDqudyasZS6G1kwBShXIQpo2K8XfKDPVeDWph4LsA' \
     -d '{
   "title" : "cardA",
   "description" : "this is card A",
@@ -1673,7 +1673,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/card HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ2ODczLCJpYXQiOjE1ODQ2NDMyNzN9.mRteum3gugaSDsu0u-i3Qv07A87X8CbuuO1ziwgKxPakg9OmyyAw6tK6jH99Eih-Ij0Imy7TNyOAx1JqE4_cag
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtZW1iZXIxQGV4YW1wbGUuY29tIiwiZXhwIjoxNTg0NjQ4NTU0LCJpYXQiOjE1ODQ2NDQ5NTR9.0EaJcaJLmf44iC6e4sz20NXjKuIabi6xrFyrxb6oor8pHVDqudyasZS6G1kwBShXIQpo2K8XfKDPVeDWph4LsA
 Content-Length: 108
 Host: localhost:8080
 

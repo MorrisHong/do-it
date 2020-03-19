@@ -23,14 +23,15 @@ public class MyBoardResult {
 
     @Getter
     private static class BoardData {
+        private Long teamId;
         private String teamName;
-        private int position;
+
         private List<BoardDataDetail> details = new ArrayList<>();
 
         public BoardData(List<Board> boards) {
             boards.forEach(board -> {
+                this.teamId = board.getTeam().getId();
                 this.teamName = board.getTeam().getName();
-                this.position = board.getTeam().getPosition();
                 this.details.add(new BoardDataDetail(board));
             });
         }
