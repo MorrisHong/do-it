@@ -17,23 +17,20 @@ public class MyBoardResult {
     public static ResponseEntity<ApiResult> build(List<Board> boards) {
         Map<String, List<Board>> collect = boards.stream().collect(groupingBy(board -> board.getTeam().getName()));
         List<BoardData> result = collect.values().stream().map(BoardData::new).collect(Collectors.toList());
-//        Set<String> strings = collect.keySet();
-//        List<BoardData> result = new ArrayList<>();
-//        for (String string : strings) {
-//            List<Board> boards1 = collect.get(string);
-//            result.add(new BoardData(boards1));
-//        }
+
         return Result.ok(ApiResult.blank().add("myBoard", result));
     }
 
     @Getter
     private static class BoardData {
         private String teamName;
+        private int position;
         private List<BoardDataDetail> details = new ArrayList<>();
 
         public BoardData(List<Board> boards) {
             boards.forEach(board -> {
                 this.teamName = board.getTeam().getName();
+                this.position = board.getTeam().getPosition();
                 this.details.add(new BoardDataDetail(board));
             });
         }
@@ -43,13 +40,11 @@ public class MyBoardResult {
             private Long boardId;
             private String title;
             private String description;
-            private String teamName;
 
             public BoardDataDetail(Board board) {
                 this.boardId = board.getId();
                 this.title = board.getTitle();
                 this.description = board.getDescription();
-                this.teamName = board.getTeam().getName();
             }
         }
 
