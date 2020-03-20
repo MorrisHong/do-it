@@ -22,11 +22,10 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class JwtRequestFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
-    private final JwtAuthenticationGenerator jwtAuthenticationGenerator;
     private static final String TOKEN_PREFIX = "Bearer ";
     private static final List<String> EXCLUDE_URL =
             Arrays.asList("/api/member" , "/api/authenticate");
@@ -36,27 +35,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-
         JwtAuthenticationDto authentication = extractAuthenticationFromHeader(request.getHeader(HttpHeaders.AUTHORIZATION));
-        String username = extractUsernameFromToken(authentication.getAccessToken());
+        String email = extractIdFromToken(authentication.getAccessToken());
 
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-            if(jwtTokenUtil.validateAuthentication(authentication)) {
-
-                if(jwtTokenUtil.isTokenExpired(authentication.getAccessToken())
-                    && !jwtTokenUtil.isTokenExpired(authentication.getRefreshToken())) {
-                    authentication = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
-                }
-
-                UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, authentication ,userDetails.getAuthorities());
-
-                response.addHeader(HttpHeaders.AUTHORIZATION, authentication.createAuthenticationHeaderString());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
+        if(email != null
+                && SecurityContextHolder.getContext().getAuthentication() == null
+                && jwtTokenUtil.validateAuthentication(authentication)){
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(userDetails, authentication ,userDetails.getAuthorities());
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
 
         filterChain.doFilter(request,response);
@@ -67,7 +56,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         return EXCLUDE_URL.stream().anyMatch(exclude -> exclude.equalsIgnoreCase(request.getServletPath()));
     }
 
-    private String extractUsernameFromToken(String token) {
+    private String extractIdFromToken(String token) {
         String username;
         try {
             username = jwtTokenUtil.getIdFromToken(token);
@@ -78,14 +67,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     private JwtAuthenticationDto extractAuthenticationFromHeader(String requestTokenHeader) {
-        JwtAuthenticationDto jwtAuthenticationDto;
         if (requestTokenHeader != null && requestTokenHeader.startsWith(TOKEN_PREFIX)) {
             String jwtToken = requestTokenHeader.substring(7);
-            jwtAuthenticationDto = extractAuthentication(jwtToken);
+            return extractAuthentication(jwtToken);
         } else {
             throw new BadCredentialsException("Invalid Token");
         }
-        return jwtAuthenticationDto;
     }
 
     private JwtAuthenticationDto extractAuthentication(String jwtToken) {

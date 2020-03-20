@@ -2,7 +2,6 @@ package kr.joyful.doit.jwt;
 
 import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.service.member.MemberService;
-import kr.joyful.doit.web.member.MemberInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,10 +30,10 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class JwtRequestFilterTest {
+class JwtAuthenticationFilterTest {
 
     @InjectMocks
-    private JwtRequestFilter jwtRequestFilter;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Mock
     private JwtTokenUtil jwtTokenUtil;
@@ -71,7 +70,7 @@ class JwtRequestFilterTest {
         when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
 
         //then
-        jwtRequestFilter.doFilterInternal(request,response,filterChain);
+        jwtAuthenticationFilter.doFilterInternal(request,response,filterChain);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
@@ -93,7 +92,7 @@ class JwtRequestFilterTest {
         //then
         Exception exception = assertThrows(
             BadCredentialsException.class,
-            () -> jwtRequestFilter.doFilterInternal(request,response,filterChain)
+            () -> jwtAuthenticationFilter.doFilterInternal(request,response,filterChain)
         );
         assertTrue(exception.getMessage().contains("Invalid Token"));
     }
@@ -116,39 +115,13 @@ class JwtRequestFilterTest {
         when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
         when(jwtTokenUtil.validateAuthentication(any(authentication.getClass()))).thenReturn(true);
 
-        jwtRequestFilter.doFilterInternal(request,response,filterChain);
+        jwtAuthenticationFilter.doFilterInternal(request,response,filterChain);
 
         //then
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         assertNotNull(principal);
         assertEquals(userDetails, principal);
-
-    }
-
-
-    @Test
-    @DisplayName("유효한 token, valid한 user일 경우 Response에 token 명시")
-    public void valid_access_response_token() throws ServletException, IOException {
-
-        //given
-        String email = "member1@example.com";
-        UserDetails userDetails = memberService.loadUserByUsername(email);
-        JwtAuthenticationDto authentication = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        FilterChain filterChain = mock(FilterChain.class);
-        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authentication.createAuthenticationHeaderString());
-
-        //when
-        when(jwtTokenUtil.getIdFromToken(authentication.getAccessToken())).thenReturn(email);
-        when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
-        when(jwtTokenUtil.validateAuthentication(any(authentication.getClass()))).thenReturn(true);
-
-        jwtRequestFilter.doFilterInternal(request,response,filterChain);
-
-        //then
-        assertEquals(authentication.createAuthenticationHeaderString(), response.getHeader(HttpHeaders.AUTHORIZATION));
 
     }
 
