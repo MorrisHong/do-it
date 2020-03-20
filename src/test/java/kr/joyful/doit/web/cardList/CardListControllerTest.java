@@ -59,7 +59,7 @@ class CardListControllerTest {
 
         mockMvc.perform(post("/api/card-list")
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                    .with(user(userDetails))
+
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(cardListDto)))
                 .andDo(print())

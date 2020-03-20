@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +57,7 @@ class TeamControllerTest {
 
     @Test
     @DisplayName("팀만들기 성공")
-    @WithUserDetails(userDetailsServiceBeanName = "memberService", value = "member1@example.com")
+//    @WithUserDetails(userDetailsServiceBeanName = "memberService", value = "member1@example.com")
     void success_create_team() throws Exception {
         //given
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
@@ -98,7 +99,7 @@ class TeamControllerTest {
 
         mockMvc.perform(post("/api/team")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                .with(user(userDetails))
+//
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
@@ -108,7 +109,7 @@ class TeamControllerTest {
 
         mockMvc.perform(post("/api/team")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                .with(user(userDetails))
+//
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto2)))
                 .andExpect(status().isBadRequest());
@@ -130,7 +131,6 @@ class TeamControllerTest {
 
         mockMvc.perform(post("/api/team")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto1.createAuthenticationHeaderString())
-                .with(user(userDetails1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
@@ -140,7 +140,6 @@ class TeamControllerTest {
 
         mockMvc.perform(post("/api/team")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto2.createAuthenticationHeaderString())
-                .with(user(userDetails2))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto2)))
                 .andExpect(status().isCreated());

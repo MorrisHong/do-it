@@ -73,7 +73,7 @@ class BoardControllerTest {
         String boardUrl = "/api/board";
         mockMvc.perform(post(boardUrl)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                .with(user(userDetails))
+
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(boardRequestDto)))
                 .andExpect(status().isCreated())
@@ -112,7 +112,7 @@ class BoardControllerTest {
         String boardUrl = "/api/board";
         mockMvc.perform(post(boardUrl)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                    .with(user(userDetails))
+
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(boardRequestDto)))
                 .andExpect(status().isCreated());
@@ -128,7 +128,7 @@ class BoardControllerTest {
 
         mockMvc.perform(RestDocumentationRequestBuilders.put(boardUrl + "/{boardId}/member/{memberId}", 1L, inviteMemberId)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                .with(user(userDetails))
+
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -160,7 +160,7 @@ class BoardControllerTest {
         //then
         mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                .with(user(userDetails))
+
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -194,7 +194,7 @@ class BoardControllerTest {
 
         mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl+"/{boardId}", 1L)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                    .with(user(userDetails))
+
                     .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
