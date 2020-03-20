@@ -23,6 +23,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -62,7 +63,7 @@ class BoardControllerTest {
 
         //given
         Member owner = memberService.findMemberById(1L);
-        Team saveTeam = teamRepository.save(Team.create("team A", "this team A", owner, 0));
+        Team saveTeam = teamRepository.save(Team.create("teamA", "this team A", owner, 0));
 
         BoardCreateRequestDto boardRequestDto = BoardCreateRequestDto.builder()
                 .title("spring study")
@@ -101,11 +102,11 @@ class BoardControllerTest {
 
         //given
         Member owner = memberService.findMemberById(1L);
-        Team saveTeam = teamRepository.save(Team.create("team A", "this team A", owner, 0));
+        Team saveTeam = teamRepository.save(Team.create("teamA", "this team A", owner, 0));
 
         BoardCreateRequestDto boardRequestDto = BoardCreateRequestDto.builder()
-                .title("spring study")
-                .description("스프링 스터디 모임")
+                .title("jpa study")
+                .description("jpa 스터디 모임")
                 .teamId(saveTeam.getId()).build();
 
         UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
@@ -175,11 +176,12 @@ class BoardControllerTest {
                         ),
                         responseFields(
                                 fieldWithPath("myBoard").description("루트 경로"),
-                                fieldWithPath("myBoard.*").description("보드가 속한 팀의 이름"),
-                                fieldWithPath("myBoard.*[].boardId").description("보드의 아이디"),
-                                fieldWithPath("myBoard.*[].title").description("보드의 이름"),
-                                fieldWithPath("myBoard.*[].description").description("보드의 설명"),
-                                fieldWithPath("myBoard.*[].teamName").description("보드가 속한 팀의 이름")
+                                fieldWithPath("myBoard[].teamId").description("팀의 아이디"),
+                                fieldWithPath("myBoard[].teamName").description("팀의 이름"),
+                                fieldWithPath("myBoard[].details[]").description("보드의 상세정보"),
+                                fieldWithPath("myBoard[].details[].boardId").description("보드의 아이디"),
+                                fieldWithPath("myBoard[].details[].title").description("보드의 타이틀"),
+                                fieldWithPath("myBoard[].details[].description").description("보드의 설명")
                         )
                 ));
     }
