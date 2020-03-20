@@ -3,7 +3,6 @@ package kr.joyful.doit.jwt;
 import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.service.member.MemberService;
 import kr.joyful.doit.web.member.MemberInfo;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -49,6 +48,9 @@ class JwtRequestFilterTest {
     @Autowired
     private JwtTokenUtil realJwtTokenUtil;
 
+    @Autowired
+    JwtAuthenticationGenerator jwtAuthenticationGenerator;
+
     @Test
     @DisplayName("유효한 jwt token 검사 후 filter 정상적인 chaining")
     public void valid_token_access_expect_ok() throws ServletException, IOException {
@@ -57,7 +59,7 @@ class JwtRequestFilterTest {
         String email = "member1@example.com";
         UserDetails userDetails = memberService.loadUserByUsername(email);
 
-        JwtAuthenticationDto jwtAuthenticationDto = realJwtTokenUtil.generateToken((MemberInfo) userDetails);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -65,7 +67,7 @@ class JwtRequestFilterTest {
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString());
 
         //when
-        when(jwtTokenUtil.getUsernameFromToken(jwtAuthenticationDto.getAccessToken())).thenReturn(email);
+        when(jwtTokenUtil.getIdFromToken(jwtAuthenticationDto.getAccessToken())).thenReturn(email);
         when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
 
         //then
@@ -86,7 +88,7 @@ class JwtRequestFilterTest {
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
         //when
-        when(jwtTokenUtil.getUsernameFromToken(token)).thenThrow(BadCredentialsException.class);
+        when(jwtTokenUtil.getIdFromToken(token)).thenThrow(BadCredentialsException.class);
 
         //then
         Exception exception = assertThrows(
@@ -103,14 +105,14 @@ class JwtRequestFilterTest {
         //given
         String email = "member1@example.com";
         UserDetails userDetails = memberService.loadUserByUsername(email);
-        JwtAuthenticationDto authentication = realJwtTokenUtil.generateToken((MemberInfo) userDetails);
+        JwtAuthenticationDto authentication = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         FilterChain filterChain = mock(FilterChain.class);
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authentication.createAuthenticationHeaderString());
 
         //when
-        when(jwtTokenUtil.getUsernameFromToken(authentication.getAccessToken())).thenReturn(email);
+        when(jwtTokenUtil.getIdFromToken(authentication.getAccessToken())).thenReturn(email);
         when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
         when(jwtTokenUtil.validateAuthentication(any(authentication.getClass()))).thenReturn(true);
 
@@ -132,14 +134,14 @@ class JwtRequestFilterTest {
         //given
         String email = "member1@example.com";
         UserDetails userDetails = memberService.loadUserByUsername(email);
-        JwtAuthenticationDto authentication = realJwtTokenUtil.generateToken((MemberInfo) userDetails);
+        JwtAuthenticationDto authentication = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         FilterChain filterChain = mock(FilterChain.class);
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authentication.createAuthenticationHeaderString());
 
         //when
-        when(jwtTokenUtil.getUsernameFromToken(authentication.getAccessToken())).thenReturn(email);
+        when(jwtTokenUtil.getIdFromToken(authentication.getAccessToken())).thenReturn(email);
         when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
         when(jwtTokenUtil.validateAuthentication(any(authentication.getClass()))).thenReturn(true);
 

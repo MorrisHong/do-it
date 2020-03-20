@@ -25,6 +25,9 @@ class JwtTokenUtilTest {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private JwtAuthenticationGenerator jwtAuthenticationGenerator;
+
     @Test
     @DisplayName("토큰 발행 테스트")
     public void generate_token() {
@@ -33,8 +36,8 @@ class JwtTokenUtilTest {
         UserDetails userDetails = memberService.loadUserByUsername(email);
 
         //when
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
-        String extractEmail = jwtTokenUtil.getUsernameFromToken(jwtAuthenticationDto.getAccessToken());
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
+        String extractEmail = jwtTokenUtil.getIdFromToken(jwtAuthenticationDto.getAccessToken());
         Date expiration = jwtTokenUtil.getExpirationDateFromToken(jwtAuthenticationDto.getAccessToken());
 
         //then
@@ -51,8 +54,8 @@ class JwtTokenUtilTest {
         UserDetails userDetails = memberService.loadUserByUsername(email);
 
         //when
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
-        String extractEmail = jwtTokenUtil.getUsernameFromToken(jwtAuthenticationDto.getRefreshToken());
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
+        String extractEmail = jwtTokenUtil.getIdFromToken(jwtAuthenticationDto.getRefreshToken());
         Date expiration = jwtTokenUtil.getExpirationDateFromToken(jwtAuthenticationDto.getRefreshToken());
 
         //then
@@ -71,8 +74,8 @@ class JwtTokenUtilTest {
 
         String email2 = "member2@example.com";
         UserDetails unAuthorizedUser = memberService.loadUserByUsername(email2);
-        JwtAuthenticationDto validAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
-        JwtAuthenticationDto invalidAuthentication = jwtTokenUtil.generateToken((MemberInfo) unAuthorizedUser);
+        JwtAuthenticationDto validAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
+        JwtAuthenticationDto invalidAuthentication = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(unAuthorizedUser);
 
         JwtAuthenticationDto forgeryAuthentication = JwtAuthenticationDto.createAuthenticationFromAuthHeader(validAuthenticationDto.getAccessToken() + ":" + invalidAuthentication.getRefreshToken());
 

@@ -1,7 +1,6 @@
 package kr.joyful.doit.jwt;
 
 import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
-import kr.joyful.doit.web.member.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,6 +26,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
+    private final JwtAuthenticationGenerator jwtAuthenticationGenerator;
     private static final String TOKEN_PREFIX = "Bearer ";
     private static final List<String> EXCLUDE_URL =
             Arrays.asList("/api/member" , "/api/authenticate");
@@ -47,7 +47,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
                 if(jwtTokenUtil.isTokenExpired(authentication.getAccessToken())
                     && !jwtTokenUtil.isTokenExpired(authentication.getRefreshToken())) {
-                    authentication = jwtTokenUtil.generateToken((MemberInfo) userDetails);
+                    authentication = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
                 }
 
                 UsernamePasswordAuthenticationToken authenticationToken =
@@ -70,7 +70,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private String extractUsernameFromToken(String token) {
         String username;
         try {
-            username = jwtTokenUtil.getUsernameFromToken(token);
+            username = jwtTokenUtil.getIdFromToken(token);
         }catch (Exception e) {
             throw new BadCredentialsException("Invalid Token");
         }

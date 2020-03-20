@@ -6,11 +6,9 @@ import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRole;
 import kr.joyful.doit.domain.team.Team;
 import kr.joyful.doit.domain.team.TeamRepository;
-import kr.joyful.doit.jwt.JwtTokenType;
-import kr.joyful.doit.jwt.JwtTokenUtil;
+import kr.joyful.doit.jwt.JwtAuthenticationGenerator;
 import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.service.member.MemberService;
-import kr.joyful.doit.web.member.MemberInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -23,7 +21,6 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -32,7 +29,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,7 +53,7 @@ class BoardControllerTest {
     TeamRepository teamRepository;
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    JwtAuthenticationGenerator jwtAuthenticationGenerator;
 
     @Test
     void basic() throws Exception {
@@ -70,13 +67,13 @@ class BoardControllerTest {
                 .description("스프링 스터디 모임")
                 .teamId(saveTeam.getId()).build();
 
-        UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetail);
+        UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
         String boardUrl = "/api/board";
         mockMvc.perform(post(boardUrl)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                .with(user(userDetail))
+                .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(boardRequestDto)))
                 .andExpect(status().isCreated())
@@ -109,13 +106,13 @@ class BoardControllerTest {
                 .description("jpa 스터디 모임")
                 .teamId(saveTeam.getId()).build();
 
-        UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetail);
+        UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
         String boardUrl = "/api/board";
         mockMvc.perform(post(boardUrl)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                    .with(user(userDetail))
+                    .with(user(userDetails))
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(boardRequestDto)))
                 .andExpect(status().isCreated());
@@ -131,7 +128,7 @@ class BoardControllerTest {
 
         mockMvc.perform(RestDocumentationRequestBuilders.put(boardUrl + "/{boardId}/member/{memberId}", 1L, inviteMemberId)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                .with(user(userDetail))
+                .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -155,15 +152,15 @@ class BoardControllerTest {
     void findMyBoardList() throws Exception {
 
         //given
-        UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetail);
+        UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
         String boardUrl = "/api/board";
 
         //then
         mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                .with(user(userDetail))
+                .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -190,14 +187,14 @@ class BoardControllerTest {
     void findBoardById() throws Exception {
 
         //given
-        UserDetails userDetail = memberService.loadUserByUsername("member1@example.com");
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetail);
+        UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
         String boardUrl = "/api/board";
 
         mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl+"/{boardId}", 1L)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
-                    .with(user(userDetail))
+                    .with(user(userDetails))
                     .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

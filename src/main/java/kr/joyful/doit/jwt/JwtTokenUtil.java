@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
-import kr.joyful.doit.web.member.MemberInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -23,8 +22,8 @@ public class JwtTokenUtil {
         this.secret = secret;
     }
 
-    public String getUsernameFromToken(String token) {
-        return getClaimFromToken(token, Claims::getSubject);
+    public String getIdFromToken(String token) {
+        return getClaimFromToken(token, Claims::getId);
     }
 
     public Date getExpirationDateFromToken(String token) {
@@ -45,20 +44,18 @@ public class JwtTokenUtil {
         return expiration.before(new Date());
     }
 
-    private String generateToken(MemberInfo memberInfo, JwtTokenType tokenType) {
-        Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, memberInfo.getEmail(), tokenType);
+    public String generateToken(String id, JwtTokenType tokenType) {
+        return generateToken(id, tokenType, new HashMap<>());
     }
 
-    public JwtAuthenticationDto generateToken(MemberInfo memberInfo) {
-        return new JwtAuthenticationDto(generateToken(memberInfo, JwtTokenType.AUTH)
-                , generateToken(memberInfo, JwtTokenType.REFRESH));
+    public String generateToken(String id, JwtTokenType tokenType, Map<String, Object> claims) {
+        return doGenerateToken(id, tokenType, claims);
     }
 
-    private String doGenerateToken(Map<String, Object> claims, String username, JwtTokenType tokenType) {
+    private String doGenerateToken(String id, JwtTokenType tokenType, Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
+                .setId(id)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + tokenType.getExpiration() * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret)
@@ -69,7 +66,7 @@ public class JwtTokenUtil {
         String accessToken = auth.getAccessToken();
         String refreshToken = auth.getRefreshToken();
         if(StringUtils.isEmpty(accessToken) || StringUtils.isEmpty(refreshToken)) return false;
-        if(!getUsernameFromToken(accessToken).equals(getUsernameFromToken(refreshToken))) return false;
+        if(!getIdFromToken(accessToken).equals(getIdFromToken(refreshToken))) return false;
         if(isTokenExpired(accessToken) && isTokenExpired(refreshToken)) return false;
         return true;
     }

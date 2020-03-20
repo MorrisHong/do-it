@@ -3,6 +3,7 @@ package kr.joyful.doit.web.team;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.joyful.doit.config.RestDocsConfiguration;
 import kr.joyful.doit.domain.team.TeamRepository;
+import kr.joyful.doit.jwt.JwtAuthenticationGenerator;
 import kr.joyful.doit.jwt.JwtTokenType;
 import kr.joyful.doit.jwt.JwtTokenUtil;
 import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
@@ -51,7 +52,7 @@ class TeamControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    JwtAuthenticationGenerator jwtAuthenticationGenerator;
 
     @Test
     @DisplayName("팀만들기 성공")
@@ -59,7 +60,7 @@ class TeamControllerTest {
     void success_create_team() throws Exception {
         //given
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
 
         //when && then
@@ -92,7 +93,7 @@ class TeamControllerTest {
     void failed_duplicate_team_name() throws Exception {
         //given
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
         TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 
         mockMvc.perform(post("/api/team")
@@ -119,11 +120,11 @@ class TeamControllerTest {
     void different_member_duplicate_team_name() throws Exception {
         //given
         UserDetails userDetails1 = memberService.loadUserByUsername("member1@example.com");
-        JwtAuthenticationDto jwtAuthenticationDto1 = jwtTokenUtil.generateToken((MemberInfo) userDetails1);
+        JwtAuthenticationDto jwtAuthenticationDto1 = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails1);
 
 
         UserDetails userDetails2 = memberService.loadUserByUsername("member2@example.com");
-        JwtAuthenticationDto jwtAuthenticationDto2 = jwtTokenUtil.generateToken((MemberInfo) userDetails2);
+        JwtAuthenticationDto jwtAuthenticationDto2 = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails2);
 
         TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 

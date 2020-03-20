@@ -3,6 +3,7 @@ package kr.joyful.doit.web.card;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.joyful.doit.config.RestDocsConfiguration;
 import kr.joyful.doit.domain.card.CardStatus;
+import kr.joyful.doit.jwt.JwtAuthenticationGenerator;
 import kr.joyful.doit.jwt.JwtTokenType;
 import kr.joyful.doit.jwt.JwtTokenUtil;
 import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
@@ -49,14 +50,14 @@ class CardControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    JwtAuthenticationGenerator jwtAuthenticationGenerator;
 
 
     @Test
     void create() throws Exception {
 
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
         CardAddRequestDto dto = CardAddRequestDto.builder()
                 .cardListId(1L)
                 .cardStatus(CardStatus.ACTIVATE)

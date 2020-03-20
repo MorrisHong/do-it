@@ -1,28 +1,25 @@
 package kr.joyful.doit.jwt.dto;
 
-import kr.joyful.doit.jwt.JwtTokenType;
-import kr.joyful.doit.jwt.JwtTokenUtil;
+import kr.joyful.doit.jwt.JwtAuthenticationGenerator;
 import kr.joyful.doit.service.member.MemberService;
-import kr.joyful.doit.web.member.MemberInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ActiveProfiles("test")
 class JwtAuthenticationDtoTest {
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private MemberService memberService;
 
     @Autowired
-    private MemberService memberService;
+    JwtAuthenticationGenerator jwtAuthenticationGenerator;
 
 
     @Test
@@ -35,7 +32,7 @@ class JwtAuthenticationDtoTest {
 
         String headerString ="";
 
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) userDetails);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
         headerString += jwtAuthenticationDto.createAuthenticationHeaderString();
 

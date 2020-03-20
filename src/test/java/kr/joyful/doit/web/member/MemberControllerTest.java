@@ -5,11 +5,9 @@ import kr.joyful.doit.config.RestDocsConfiguration;
 import kr.joyful.doit.domain.member.Member;
 import kr.joyful.doit.domain.member.MemberRepository;
 import kr.joyful.doit.domain.member.MemberRole;
-import kr.joyful.doit.jwt.JwtTokenType;
-import kr.joyful.doit.jwt.JwtTokenUtil;
+import kr.joyful.doit.jwt.JwtAuthenticationGenerator;
 import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.service.member.MemberService;
-import kr.joyful.doit.web.member.MemberJoinRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +49,10 @@ class MemberControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    MemberService memberService;
 
     @Autowired
-    MemberService memberService;
+    JwtAuthenticationGenerator jwtAuthenticationGenerator;
 
     @Test
     @DisplayName("body에 아무것도 없이 회원가입. 400에러 기대")
@@ -134,7 +132,7 @@ class MemberControllerTest {
 
         Member member = new Member(email, username, password, role);
         Member saveMember = memberRepository.save(member);
-        JwtAuthenticationDto jwtAuthenticationDto = jwtTokenUtil.generateToken((MemberInfo) memberService.loadUserByUsername(member.getEmail()));
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(memberService.loadUserByUsername(member.getEmail()));
 
         //when, then
         String joinUrl = "/api/member";
