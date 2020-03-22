@@ -122,8 +122,8 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("id로 회원찾기")
-    void findMember() throws Exception {
+    @DisplayName("MemberController - findMember. (내 프로필 보기.)")
+    void findMember_isOwner_true() throws Exception {
         //given
         String email = "mock@email.com";
         String username = "mockMember";
@@ -144,14 +144,47 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("email").value(email))
                 .andExpect(jsonPath("username").value(username))
+                .andExpect(jsonPath("owner").value(true))
 
                 .andDo(document(
                         "find-member",
                         responseFields(
                                 fieldWithPath("email").description("사용자의 이메일주소"),
-                                fieldWithPath("username").description("사용자가 사이트 내에서 사용할 이름")
+                                fieldWithPath("username").description("사용자가 사이트 내에서 사용할 이름"),
+                                fieldWithPath("owner").description("프로필의 주인이면 true, 아니면 false")
                         )
                 ));
+    }
+
+    @Test
+    @DisplayName("MemberController - findMember. (다른 사용자의 프로필 보기.)")
+    void findMember_isOwner_false() throws Exception {
+        //given
+        String email = "mock@email.com";
+        String username = "mockMember";
+        String password = "1234";
+        MemberRole role = MemberRole.MEMBER;
+
+        Member member = new Member(email, username, password, role);
+        memberRepository.save(member);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(memberService.loadUserByUsername(member.getEmail()));
+
+        //when, then
+        String loginEmail = "login@member.com";
+        String anotherUsername = "anotherMock";
+
+        Member anotherMember = new Member(loginEmail, anotherUsername, "1234", MemberRole.MEMBER);
+        Member loginMember = memberRepository.save(anotherMember);
+        String joinUrl = "/api/member";
+
+        mockMvc.perform(get(joinUrl + "/{memberId}", loginMember.getId())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                    .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("email").value(loginEmail))
+                .andExpect(jsonPath("username").value(anotherUsername))
+                .andExpect(jsonPath("owner").value(false));
     }
 
     @Test

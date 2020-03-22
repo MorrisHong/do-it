@@ -32,9 +32,14 @@ public class MemberController {
     }
 
     @GetMapping("/api/member/{memberId}")
-    public ResponseEntity<MemberResponseDto> findMember(@PathVariable Long memberId) {
+    public ResponseEntity<MemberResponseDto> findMember(@PathVariable Long memberId, @CurrentUser MemberInfo memberInfo) {
         Member member = memberService.findMemberById(memberId);
         MemberResponseDto dto = new MemberResponseDto(member);
+
+        if (member.equals(memberInfo.getMember())) {
+            dto.setOwner(true);
+        }
+
         return ResponseEntity.ok(dto);
     }
 }
