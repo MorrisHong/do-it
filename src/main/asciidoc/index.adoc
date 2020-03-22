@@ -23,7 +23,7 @@ operation::create-member[snippets='request-fields,curl-request,http-request,requ
 === 회원조회
 `GET`요청을 이용해 가입한 회원을 조회할 수 있다
 
-operation::find-member[snippets='curl-request,http-request,http-response']
+operation::find-member[snippets='curl-request,http-request,http-response,response-fields']
 
 ---
 
