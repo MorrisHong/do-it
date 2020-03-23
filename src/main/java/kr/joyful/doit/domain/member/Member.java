@@ -43,4 +43,8 @@ public class Member extends BaseTimeEntity {
     public static Member create(String email, String username, String password, MemberRole role) {
         return new Member(email, username, password, role);
     }
+
+    public void updateUsername(String username) {
+        this.username = username;
+    }
 }
