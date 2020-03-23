@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -36,7 +37,11 @@ public class JwtTokenUtil {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        try{
+            return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        }catch (Exception e) {
+            throw new BadCredentialsException("Invalid Token");
+        }
     }
 
     private Boolean isTokenExpired(String token) {

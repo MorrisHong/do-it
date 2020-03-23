@@ -125,4 +125,20 @@ class JwtAuthenticationControllerTest {
             .andExpect(status().isOk());
     }
 
+    @Test
+    @DisplayName("토큰 요청 테스트, 유효한 토큰이 아닐경우 401 return")
+    public void invalid_access_refresh_token_expect_401() throws Exception {
+        //given
+        String email = "member1@example.com";
+        UserDetails userDetails = memberService.loadUserByUsername(email);
+
+        //when then
+        String authenticateUrl = "/api/re-authenticate";
+        mockMvc.perform(post(authenticateUrl)
+            .servletPath(authenticateUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer invalid"))
+            .andDo(print())
+            .andExpect(status().isUnauthorized());
+    }
+
 }
