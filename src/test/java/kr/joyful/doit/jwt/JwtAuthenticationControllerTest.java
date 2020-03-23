@@ -1,6 +1,7 @@
 package kr.joyful.doit.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import kr.joyful.doit.jwt.dto.JwtAuthenticationRequest;
 import kr.joyful.doit.service.member.MemberService;
 import org.junit.jupiter.api.DisplayName;
@@ -9,10 +10,15 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,6 +40,9 @@ class JwtAuthenticationControllerTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private JwtAuthenticationGenerator jwtAuthenticationGenerator;
 
     @Test
     @DisplayName("토큰 요청 테스트")
@@ -96,6 +105,24 @@ class JwtAuthenticationControllerTest {
             .content(objectMapper.writeValueAsString(request)))
             .andDo(print())
             .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("토큰 요청 테스트, refreshToken으로 새로운 token 재발급")
+    public void regenerate_token() throws Exception {
+        //given
+        String email = "member1@example.com";
+        UserDetails userDetails = memberService.loadUserByUsername(email);
+        JwtAuthenticationDto authentication
+                = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
+
+        //when then
+        String authenticateUrl = "/api/re-authenticate";
+        mockMvc.perform(post(authenticateUrl)
+            .servletPath(authenticateUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + authentication.getRefreshToken()))
+            .andDo(print())
+            .andExpect(status().isOk());
     }
 
 }
