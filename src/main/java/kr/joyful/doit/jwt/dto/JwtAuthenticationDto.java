@@ -1,23 +1,25 @@
 package kr.joyful.doit.jwt.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JwtAuthenticationDto {
 
     private String accessToken;
     private String refreshToken;
 
-    public static JwtAuthenticationDto createAuthenticationFromAuthHeader(String authorizationHeader) {
-        int p = authorizationHeader.indexOf(":");
-        return new JwtAuthenticationDto(authorizationHeader.substring(0, p) , authorizationHeader.substring(p + 1));
+    public static JwtAuthenticationDto createAuthenticationFromTokens(String accessToken, String refreshToken) {
+        JwtAuthenticationDto jwtAuthenticationDto = new JwtAuthenticationDto();
+        jwtAuthenticationDto.accessToken = accessToken;
+        jwtAuthenticationDto.refreshToken = refreshToken;
+        return jwtAuthenticationDto;
     }
 
     public String createAuthenticationHeaderString() {
-        return accessToken + ":" + refreshToken;
+        return accessToken;
     }
 
 }

@@ -113,7 +113,7 @@ class JwtAuthenticationFilterTest {
         //when
         when(jwtTokenUtil.getIdFromToken(authentication.getAccessToken())).thenReturn(email);
         when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
-        when(jwtTokenUtil.validateAuthentication(any(authentication.getClass()))).thenReturn(true);
+        when(jwtTokenUtil.validateToken(authentication.getAccessToken())).thenReturn(true);
 
         jwtAuthenticationFilter.doFilterInternal(request,response,filterChain);
 
