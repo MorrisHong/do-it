@@ -72,7 +72,7 @@ class BoardControllerTest {
 
         String boardUrl = "/api/board";
         mockMvc.perform(post(boardUrl)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(boardRequestDto)))
@@ -111,7 +111,7 @@ class BoardControllerTest {
 
         String boardUrl = "/api/board";
         mockMvc.perform(post(boardUrl)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(boardRequestDto)))
@@ -127,7 +127,7 @@ class BoardControllerTest {
         Long inviteMemberId = memberService.join(willInviteMember);
 
         mockMvc.perform(RestDocumentationRequestBuilders.put(boardUrl + "/{boardId}/member/{memberId}", 1L, inviteMemberId)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -159,7 +159,7 @@ class BoardControllerTest {
 
         //then
         mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -193,7 +193,7 @@ class BoardControllerTest {
         String boardUrl = "/api/board";
 
         mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl+"/{boardId}", 1L)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 
                     .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

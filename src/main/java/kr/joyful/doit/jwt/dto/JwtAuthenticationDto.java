@@ -17,9 +17,4 @@ public class JwtAuthenticationDto {
         jwtAuthenticationDto.refreshToken = refreshToken;
         return jwtAuthenticationDto;
     }
-
-    public String createAuthenticationHeaderString() {
-        return accessToken;
-    }
-
 }
