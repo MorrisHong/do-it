@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import kr.joyful.doit.jwt.dto.JwtAuthenticationDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -36,10 +37,14 @@ public class JwtTokenUtil {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        try{
+            return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        }catch (Exception e) {
+            throw new BadCredentialsException("Invalid Token");
+        }
     }
 
-    public Boolean isTokenExpired(String token) {
+    private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
@@ -62,14 +67,8 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public Boolean validateAuthentication(JwtAuthenticationDto auth) {
-        String accessToken = auth.getAccessToken();
-        String refreshToken = auth.getRefreshToken();
-        if(StringUtils.isEmpty(accessToken) || StringUtils.isEmpty(refreshToken)) return false;
-        if(!getIdFromToken(accessToken).equals(getIdFromToken(refreshToken))) return false;
-        if(isTokenExpired(accessToken) && isTokenExpired(refreshToken)) return false;
-        return true;
+    public boolean validateToken(String accessToken) {
+        return !isTokenExpired(accessToken);
     }
-
 }
 

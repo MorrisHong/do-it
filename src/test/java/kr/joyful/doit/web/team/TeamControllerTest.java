@@ -68,7 +68,7 @@ class TeamControllerTest {
         TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 
         mockMvc.perform(post("/api/team")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andDo(print())
@@ -98,7 +98,7 @@ class TeamControllerTest {
         TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 
         mockMvc.perform(post("/api/team")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 //
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
@@ -108,7 +108,7 @@ class TeamControllerTest {
         TeamCreateRequestDto dto2 = new TeamCreateRequestDto("test team A", "this is another teamA");
 
         mockMvc.perform(post("/api/team")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 //
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto2)))
@@ -130,7 +130,7 @@ class TeamControllerTest {
         TeamCreateRequestDto dto = new TeamCreateRequestDto("test team A", "this is teamA");
 
         mockMvc.perform(post("/api/team")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto1.createAuthenticationHeaderString())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto1.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
@@ -139,7 +139,7 @@ class TeamControllerTest {
         TeamCreateRequestDto dto2 = new TeamCreateRequestDto("test team A", "this is another teamA");
 
         mockMvc.perform(post("/api/team")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto2.createAuthenticationHeaderString())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto2.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto2)))
                 .andExpect(status().isCreated());

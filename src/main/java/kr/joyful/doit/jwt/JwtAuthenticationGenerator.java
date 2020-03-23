@@ -14,7 +14,9 @@ public class JwtAuthenticationGenerator {
 
     public JwtAuthenticationDto createJwtAuthenticationFromUserDetails(UserDetails userDetails) {
         MemberInfo memberInfo = (MemberInfo) userDetails;
-        return new JwtAuthenticationDto(jwtTokenUtil.generateToken(memberInfo.getEmail(), JwtTokenType.AUTH),
-                jwtTokenUtil.generateToken(memberInfo.getEmail(), JwtTokenType.REFRESH));
+        return JwtAuthenticationDto.createAuthenticationFromTokens(
+                jwtTokenUtil.generateToken(memberInfo.getEmail(), JwtTokenType.AUTH),
+                jwtTokenUtil.generateToken(memberInfo.getEmail(), JwtTokenType.REFRESH)
+        );
     }
 }

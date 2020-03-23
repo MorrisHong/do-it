@@ -140,7 +140,7 @@ class MemberControllerTest {
         String joinUrl = "/api/member";
 
         mockMvc.perform(get(joinUrl + "/{memberId}", saveMember.getId())
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
                     .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -180,7 +180,7 @@ class MemberControllerTest {
         String joinUrl = "/api/member";
 
         mockMvc.perform(get(joinUrl + "/{memberId}", loginMember.getId())
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
                     .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

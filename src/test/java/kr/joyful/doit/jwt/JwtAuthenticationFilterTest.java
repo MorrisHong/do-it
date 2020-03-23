@@ -63,7 +63,7 @@ class JwtAuthenticationFilterTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         FilterChain filterChain = mock(FilterChain.class);
-        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString());
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken());
 
         //when
         when(jwtTokenUtil.getIdFromToken(jwtAuthenticationDto.getAccessToken())).thenReturn(email);
@@ -108,12 +108,12 @@ class JwtAuthenticationFilterTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         FilterChain filterChain = mock(FilterChain.class);
-        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authentication.createAuthenticationHeaderString());
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + authentication.getAccessToken());
 
         //when
         when(jwtTokenUtil.getIdFromToken(authentication.getAccessToken())).thenReturn(email);
         when(jwtUserDetailsService.loadUserByUsername(email)).thenReturn(userDetails);
-        when(jwtTokenUtil.validateAuthentication(any(authentication.getClass()))).thenReturn(true);
+        when(jwtTokenUtil.validateToken(authentication.getAccessToken())).thenReturn(true);
 
         jwtAuthenticationFilter.doFilterInternal(request,response,filterChain);
 
