@@ -27,6 +27,14 @@ operation::find-member[snippets='curl-request,http-request,http-response,respons
 
 ---
 
+[[update_member_name]]
+=== 회원의 이름 변경
+`PUT`요청을 이용해 자신의 username을 변경할 수 있다.
+
+operation::update-member-name[snippets='request-fields,curl-request,http-request,http-response']
+
+---
+
 [[Team]]
 == 팀
 

@@ -208,12 +208,22 @@ class MemberControllerTest {
         String joinUrl = "/api/member";
 
         mockMvc.perform(put(joinUrl + "/{memberId}", member.getId())
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+
+                .andDo(document(
+                        "update-member-name",
+                        requestHeaders(
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("Content-Type Header")
+                        ),
+                        requestFields(
+                                fieldWithPath("username").description("변경할 유저의 네임")
+                        )
+                ));
 
         Member findMember = memberRepository.findById(member.getId()).get();
         assertEquals(updateUsername, findMember.getUsername());
