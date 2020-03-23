@@ -42,4 +42,25 @@ public class MemberController {
 
         return ResponseEntity.ok(dto);
     }
+
+    @PutMapping("/api/member/{memberId}")
+    public ResponseEntity<?> updateMemberName(@PathVariable Long memberId,
+                                              @CurrentUser MemberInfo memberInfo,
+                                              @RequestBody @Valid MemberUpdateNameRequestDto dto,
+                                              BindingResult bindingResult) {
+
+        Member member = memberService.findMemberById(memberId);
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+
+        if (!member.equals(memberInfo.getMember())) {
+            throw new NotOwnerException();
+        }
+
+        Long updateMemberId = memberService.updateUsername(memberId, dto.getUsername());
+
+        return ResponseEntity.ok(updateMemberId);
+    }
 }

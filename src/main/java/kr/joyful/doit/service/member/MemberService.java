@@ -56,4 +56,11 @@ public class MemberService implements UserDetailsService{
             throw new MemberAlreadyExistsException();
         }
     }
+
+    public Long updateUsername(Long memberId, String username) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
+        member.updateUsername(username);
+
+        return member.getId();
+    }
 }

@@ -20,13 +20,15 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -185,6 +187,37 @@ class MemberControllerTest {
                 .andExpect(jsonPath("email").value(loginEmail))
                 .andExpect(jsonPath("username").value(anotherUsername))
                 .andExpect(jsonPath("owner").value(false));
+    }
+
+    @Test
+    @DisplayName("멤버이름 수정하기 - 올바른 권한")
+    void updateMemberName_success() throws Exception {
+        //given
+        String email = "mock@email.com";
+        String username = "mockMember";
+        String password = "1234";
+        MemberRole role = MemberRole.MEMBER;
+
+        Member member = new Member(email, username, password, role);
+        memberRepository.save(member);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(memberService.loadUserByUsername(member.getEmail()));
+
+        //when, then
+        String updateUsername = "updateUsername";
+        MemberUpdateNameRequestDto dto = new MemberUpdateNameRequestDto(updateUsername);
+        String joinUrl = "/api/member";
+
+        mockMvc.perform(put(joinUrl + "/{memberId}", member.getId())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.createAuthenticationHeaderString())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(dto)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        Member findMember = memberRepository.findById(member.getId()).get();
+        assertEquals(updateUsername, findMember.getUsername());
+
     }
 
     @Test
