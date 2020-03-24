@@ -2,6 +2,8 @@ package kr.joyful.doit.web.card;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.joyful.doit.config.RestDocsConfiguration;
+import kr.joyful.doit.domain.card.Card;
+import kr.joyful.doit.domain.card.CardRepository;
 import kr.joyful.doit.domain.card.CardStatus;
 import kr.joyful.doit.jwt.JwtAuthenticationGenerator;
 import kr.joyful.doit.jwt.JwtTokenType;
@@ -30,6 +32,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,6 +54,9 @@ class CardControllerTest {
 
     @Autowired
     JwtAuthenticationGenerator jwtAuthenticationGenerator;
+
+    @Autowired
+    CardRepository cardRepository;
 
 
     @Test
@@ -86,6 +92,26 @@ class CardControllerTest {
                                 fieldWithPath("cardListId").description("카드가 속한 카드리스트의 id")
                         )
                 ));
+    }
+
+    @Test
+    void updatePosition() throws Exception {
+        Card card = Card.create("test card", "description", CardStatus.ACTIVATE, null, 0);
+        Card saveCard = cardRepository.save(card);
+
+        UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
+        JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
+
+
+        mockMvc.perform(put("/api/card/{cardId}", saveCard.getId())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("2"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        Card findCard = cardRepository.findByCardId(saveCard.getId()).get();
+        assertEquals(2, findCard.getPosition());
     }
 
 }
