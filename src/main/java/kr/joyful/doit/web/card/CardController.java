@@ -3,11 +3,10 @@ package kr.joyful.doit.web.card;
 import kr.joyful.doit.domain.cardList.CardList;
 import kr.joyful.doit.service.card.CardService;
 import kr.joyful.doit.service.cardList.CardListService;
+import kr.joyful.doit.web.result.ApiResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,5 +23,11 @@ public class CardController {
         CardList cardList = cardListService.findById(dto.getCardListId());
         Long cardId = cardService.addCard(dto.toEntity(cardList));
         return ResponseEntity.created(new URI("/api/card/" + cardId)).build();
+    }
+
+    @PutMapping("/api/card/{cardId}")
+    public ResponseEntity<?> changePosition(@PathVariable Long cardId, @RequestBody Integer newPosition) {
+        cardService.changeCardPosition(cardId, newPosition);
+        return ResponseEntity.ok().build();
     }
 }

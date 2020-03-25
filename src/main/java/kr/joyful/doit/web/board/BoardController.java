@@ -48,7 +48,6 @@ public class BoardController {
         return BoardResult.build(findTeam, findBoard, findBoardMember, findCardList, findCards);
     }
 
-    //todo : dto로 완성시키기.
     @GetMapping("/api/board")
     public ResponseEntity<?> findMyBoardList(@CurrentUser MemberInfo memberInfo) {
         List<Board> boards = boardService.findMyBoardList(memberInfo.getMember());

@@ -5,7 +5,6 @@ import kr.joyful.doit.domain.board.BoardRepository;
 import kr.joyful.doit.domain.boardMember.BoardMember;
 import kr.joyful.doit.domain.boardMember.BoardMemberRepository;
 import kr.joyful.doit.domain.member.Member;
-import kr.joyful.doit.domain.team.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,7 @@ public class BoardService {
     public Long save(Board board, Member member) {
         Optional<Board> boardByTitleAndTeam = boardRepository.findBoardByTitleAndTeam(board.getTitle(), board.getTeam());
         if (boardByTitleAndTeam.isPresent()) {
-            throw new BoardAlreadyExsistException();
+            throw new BoardAlreadyExistsException();
         }
         BoardMember boardMember = BoardMember.create(board, member);
         boardMemberRepository.save(boardMember);
