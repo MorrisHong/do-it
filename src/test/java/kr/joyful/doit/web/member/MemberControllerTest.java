@@ -60,7 +60,7 @@ class MemberControllerTest {
     @DisplayName("body에 아무것도 없이 회원가입. 400에러 기대")
     void expected_40x_error() throws Exception {
 
-        String joinUrl = "/api/member";
+        String joinUrl = "/api/members";
         mockMvc.perform(post(joinUrl)
                     .servletPath(joinUrl))
                 .andDo(print())
@@ -80,7 +80,7 @@ class MemberControllerTest {
         MemberJoinRequestDto memberDto = createMockMemberDto(email, username, password, password2);
 
 
-        String joinUrl = "/api/member";
+        String joinUrl = "/api/members";
         mockMvc.perform(post(joinUrl)
                     .servletPath(joinUrl)
                     .content(objectMapper.writeValueAsString(memberDto))
@@ -98,9 +98,6 @@ class MemberControllerTest {
                                 fieldWithPath("username").description("사용자가 사이트 내에서 사용할 이름"),
                                 fieldWithPath("password").description("사용자의 비밀번호"),
                                 fieldWithPath("password2").description("사용자의 비밀번호 확인")
-                        ),
-                        responseHeaders(
-                                headerWithName(HttpHeaders.LOCATION).description("Location Header")
                         )
                 ));
     }
@@ -115,7 +112,7 @@ class MemberControllerTest {
 
         MemberJoinRequestDto memberDto = createMockMemberDto(email, username, password, password2);
 
-        String joinUrl = "/api/member";
+        String joinUrl = "/api/members";
         mockMvc.perform(post(joinUrl)
                     .servletPath(joinUrl)
                     .content(objectMapper.writeValueAsString(memberDto))
@@ -137,23 +134,23 @@ class MemberControllerTest {
         JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(memberService.loadUserByUsername(member.getEmail()));
 
         //when, then
-        String joinUrl = "/api/member";
+        String joinUrl = "/api/members";
 
         mockMvc.perform(get(joinUrl + "/{memberId}", saveMember.getId())
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
                     .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("email").value(email))
-                .andExpect(jsonPath("username").value(username))
-                .andExpect(jsonPath("owner").value(true))
+                .andExpect(jsonPath("data.email").value(email))
+                .andExpect(jsonPath("data.username").value(username))
+                .andExpect(jsonPath("data.owner").value(true))
 
                 .andDo(document(
                         "find-member",
                         responseFields(
-                                fieldWithPath("email").description("사용자의 이메일주소"),
-                                fieldWithPath("username").description("사용자가 사이트 내에서 사용할 이름"),
-                                fieldWithPath("owner").description("프로필의 주인이면 true, 아니면 false")
+                                fieldWithPath("data.email").description("사용자의 이메일주소"),
+                                fieldWithPath("data.username").description("사용자가 사이트 내에서 사용할 이름"),
+                                fieldWithPath("data.owner").description("프로필의 주인이면 true, 아니면 false")
                         )
                 ));
     }
@@ -177,16 +174,16 @@ class MemberControllerTest {
 
         Member anotherMember = new Member(loginEmail, anotherUsername, "1234", MemberRole.MEMBER);
         Member loginMember = memberRepository.save(anotherMember);
-        String joinUrl = "/api/member";
+        String joinUrl = "/api/members";
 
         mockMvc.perform(get(joinUrl + "/{memberId}", loginMember.getId())
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
                     .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("email").value(loginEmail))
-                .andExpect(jsonPath("username").value(anotherUsername))
-                .andExpect(jsonPath("owner").value(false));
+                .andExpect(jsonPath("data.email").value(loginEmail))
+                .andExpect(jsonPath("data.username").value(anotherUsername))
+                .andExpect(jsonPath("data.owner").value(false));
     }
 
     @Test
@@ -205,7 +202,7 @@ class MemberControllerTest {
         //when, then
         String updateUsername = "updateUsername";
         MemberUpdateNameRequestDto dto = new MemberUpdateNameRequestDto(updateUsername);
-        String joinUrl = "/api/member";
+        String joinUrl = "/api/members";
 
         mockMvc.perform(put(joinUrl + "/{memberId}", member.getId())
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
@@ -222,6 +219,9 @@ class MemberControllerTest {
                         ),
                         requestFields(
                                 fieldWithPath("username").description("변경할 유저의 네임")
+                        ),
+                        responseFields(
+                                fieldWithPath("memberId").description("업데이트 된 유저의 id")
                         )
                 ));
 
@@ -242,7 +242,7 @@ class MemberControllerTest {
         MemberJoinRequestDto mockMemberDto = createMockMemberDto(email, username, password, password2);
 
         //when, then
-        String joinUrl = "/api/member";
+        String joinUrl = "/api/members";
         mockMvc.perform(post(joinUrl)
                     .servletPath(joinUrl)
                     .contentType(MediaType.APPLICATION_JSON)
