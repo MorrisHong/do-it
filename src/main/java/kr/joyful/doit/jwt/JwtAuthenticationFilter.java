@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenUtil jwtTokenUtil;
     private static final String TOKEN_PREFIX = "Bearer ";
     private static final List<String> EXCLUDE_URL =
-            Arrays.asList("/api/member" , "/api/authenticate", "/api/re-authenticate");
+            Arrays.asList("/api/members" , "/api/authenticate", "/api/re-authenticate");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
