@@ -71,7 +71,7 @@ class CardControllerTest {
                 .title("cardA")
                 .build();
 
-        mockMvc.perform(post("/api/card")
+        mockMvc.perform(post("/api/cards")
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 
                     .contentType(MediaType.APPLICATION_JSON)
@@ -103,7 +103,7 @@ class CardControllerTest {
         JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
 
-        mockMvc.perform(put("/api/card/{cardId}", saveCard.getId())
+        mockMvc.perform(put("/api/cards/{cardId}", saveCard.getId())
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("2"))
