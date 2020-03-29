@@ -70,7 +70,7 @@ class BoardControllerTest {
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
         JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
-        String boardUrl = "/api/board";
+        String boardUrl = "/api/boards";
         mockMvc.perform(post(boardUrl)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 
@@ -109,7 +109,7 @@ class BoardControllerTest {
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
         JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
-        String boardUrl = "/api/board";
+        String boardUrl = "/api/boards";
         mockMvc.perform(post(boardUrl)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 
@@ -126,7 +126,7 @@ class BoardControllerTest {
                 .build();
         Long inviteMemberId = memberService.join(willInviteMember);
 
-        mockMvc.perform(RestDocumentationRequestBuilders.put(boardUrl + "/{boardId}/member/{memberId}", 1L, inviteMemberId)
+        mockMvc.perform(RestDocumentationRequestBuilders.put(boardUrl + "/{boardId}/members/{memberId}", 1L, inviteMemberId)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 
                 .contentType(MediaType.APPLICATION_JSON))
@@ -155,7 +155,7 @@ class BoardControllerTest {
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
         JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
-        String boardUrl = "/api/board";
+        String boardUrl = "/api/boards";
 
         //then
         mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl)
@@ -190,7 +190,7 @@ class BoardControllerTest {
         UserDetails userDetails = memberService.loadUserByUsername("member1@example.com");
         JwtAuthenticationDto jwtAuthenticationDto = jwtAuthenticationGenerator.createJwtAuthenticationFromUserDetails(userDetails);
 
-        String boardUrl = "/api/board";
+        String boardUrl = "/api/boards";
 
         mockMvc.perform(RestDocumentationRequestBuilders.get(boardUrl+"/{boardId}", 1L)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())

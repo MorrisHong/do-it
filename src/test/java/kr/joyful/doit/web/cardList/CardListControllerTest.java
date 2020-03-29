@@ -57,7 +57,7 @@ class CardListControllerTest {
                 .position(0)
                 .build();
 
-        mockMvc.perform(post("/api/card-list")
+        mockMvc.perform(post("/api/card-lists")
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAuthenticationDto.getAccessToken())
 
                     .contentType(MediaType.APPLICATION_JSON)
